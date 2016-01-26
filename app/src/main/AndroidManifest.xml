@@ -2,6 +2,8 @@
 <manifest package="com.ua.viktor.social"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -18,16 +20,16 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".MainActivity">
+
+        </activity>
+
+        <activity android:name=".authentication.LoginActivity"
+                  android:windowSoftInputMode="adjustResize|stateVisible"
+                  android:configChanges="keyboard|orientation|screenSize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".login.LoginActivity"
-                  android:windowSoftInputMode="adjustResize|stateVisible"
-                  android:configChanges="keyboard|orientation|screenSize">
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -37,7 +39,16 @@
                     android:scheme="your" />
                 </intent-filter>
         </activity>
-
+        <service
+            android:name=".authentication.GitHubAuthenticatorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
     </application>
 
 </manifest>

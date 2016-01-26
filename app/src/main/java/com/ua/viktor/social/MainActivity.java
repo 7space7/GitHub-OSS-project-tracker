@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.ua.viktor.social.login.LoginActivity;
+import com.ua.viktor.social.authentication.LoginActivity;
 import com.ua.viktor.social.utils.Constants;
 
 public class MainActivity extends AppCompatActivity {
