@@ -4,10 +4,8 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,12 +17,17 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.ua.viktor.social.MainActivity;
 import com.ua.viktor.social.R;
+import com.ua.viktor.social.ServiceGenerator;
+import com.ua.viktor.social.UserService;
+import com.ua.viktor.social.model.Users;
 import com.ua.viktor.social.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
+import retrofit.Retrofit;
 
 
 public class LoginActivity extends AccountAuthenticatorActivity {
@@ -42,7 +45,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Uri uri = getIntent().getData();
                 if (uri == null) {
                     Intent intent = new Intent(
@@ -60,14 +62,16 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         String authType = "password";
         Account[] accounts = accountManager.getAccountsByType(accountType);
         Account account = accounts.length != 0 ?  accounts[0] : null;
-        String authToken = accountManager.peekAuthToken(account, authType);
-        if(authToken!=null){
-            finish();
-            Intent intentM = new Intent(LoginActivity.this, MainActivity.class);
-            intentM.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intentM);
+        if (account!=null) {
+            String authToken = accountManager.peekAuthToken(account, authType);
+
+            if (authToken != null) {
+                finish();
+                Intent intentM = new Intent(LoginActivity.this, MainActivity.class);
+                intentM.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentM);
+            }
         }
-       // System.out.println(""+authToken);
     }
 
 
@@ -75,9 +79,9 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     protected void onResume() {
         super.onResume();
         authorization();
-
-
     }
+
+
 
     public void authorization() {
         Uri uri = getIntent().getData();
@@ -99,40 +103,14 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
                     @Override
                     public void onResponse(Response response) throws IOException {
+
                         final String json = response.body().string();
                         JSONObject jsonAcess = null;
                         try {
                             jsonAcess = new JSONObject(json);
-                            final String accessToken = jsonAcess.getString("access_token");
+                             String accessToken = jsonAcess.getString("access_token");
                             if (accessToken!=null) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                        SharedPreferences.Editor spe = sp.edit();
-                                        spe.putString(Constants.GITHUB_API_KEY, accessToken).apply();
-
-                                        String accountType = "com.github";
-
-                                        Account account = new Account("7space7", "com.github");
-                                        AccountManager accountManager = AccountManager.get(getApplicationContext());
-                                        accountManager.addAccountExplicitly(account, null, null);
-                                        String authType = "password";
-                                        String authToken = accessToken;
-                                        accountManager.setAuthToken(account, authType, authToken);
-
-                                        Intent intent = new Intent();
-                                        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, "7space7");
-                                        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                                        intent.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
-                                        ((AccountAuthenticatorActivity) LoginActivity.this).setAccountAuthenticatorResult(intent.getExtras());
-                                        setResult(RESULT_OK, intent);
-
-                                        Intent intentM = new Intent(LoginActivity.this, MainActivity.class);
-                                        intentM.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intentM);
-                                    }
-                                });
+                                getUserLogin(accessToken);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -142,9 +120,56 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 });
 
             } else if (uri.getQueryParameter("error") != null) {
-                Log.e("ERROR: ", uri.getQueryParameter("error"));
+                Log.e(TAG, uri.getQueryParameter("error"));
             }
         }
+    }
+    public void  addAccountManager(String access_token,String username){
+        String accountType = "com.github";
+
+        Account account = new Account(username, "com.github");
+        AccountManager accountManager = AccountManager.get(getApplicationContext());
+        accountManager.addAccountExplicitly(account, null, null);
+        String authType = "password";
+        String authToken = access_token;
+        accountManager.setAuthToken(account, authType, authToken);
+
+        Intent intent = new Intent();
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+        intent.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
+        ((AccountAuthenticatorActivity) LoginActivity.this).setAccountAuthenticatorResult(intent.getExtras());
+        setResult(RESULT_OK, intent);
+
+        Intent intentM = new Intent(LoginActivity.this, MainActivity.class);
+        intentM.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intentM);
+    }
+
+    public void getUserLogin(final String accessToken){
+        UserService client = ServiceGenerator.createService(UserService.class);
+
+        // Fetch and print a list of the contributors to this library.
+        retrofit.Call<Users> call = client.contributors(accessToken);
+
+        call.enqueue(new retrofit.Callback<Users>() {
+            @Override
+            public void onResponse(final retrofit.Response<Users> response, Retrofit retrofit) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        addAccountManager(accessToken, response.body().login);
+                    }
+                });
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 
 }
