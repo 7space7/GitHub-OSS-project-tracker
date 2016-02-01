@@ -1,4 +1,4 @@
-package com.ua.viktor.social;
+package com.ua.viktor.github;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

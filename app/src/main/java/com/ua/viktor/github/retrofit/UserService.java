@@ -1,10 +1,11 @@
-package com.ua.viktor.social;
+package com.ua.viktor.github.retrofit;
 
-import com.ua.viktor.social.model.Users;
+import com.ua.viktor.github.model.Users;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+
 
 /**
  * Created by viktor on 26.01.16.

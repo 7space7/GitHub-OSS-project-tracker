@@ -1,4 +1,4 @@
-package com.ua.viktor.social.authentication;
+package com.ua.viktor.github.authentication;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

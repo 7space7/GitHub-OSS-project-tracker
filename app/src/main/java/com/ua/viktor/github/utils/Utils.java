@@ -1,4 +1,4 @@
-package com.ua.viktor.social.utils;
+package com.ua.viktor.github.utils;
 
 import android.content.Context;
 

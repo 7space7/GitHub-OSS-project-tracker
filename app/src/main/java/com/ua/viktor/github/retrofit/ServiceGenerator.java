@@ -1,9 +1,10 @@
-package com.ua.viktor.social;
+package com.ua.viktor.github.retrofit;
 
-import com.squareup.okhttp.OkHttpClient;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
+import okhttp3.OkHttpClient;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+
 
 /**
  * Created by viktor on 26.01.16.

@@ -1,6 +1,6 @@
-package com.ua.viktor.social.utils;
+package com.ua.viktor.github.utils;
 
-import com.ua.viktor.social.BuildConfig;
+import com.ua.viktor.github.BuildConfig;
 
 /**
  * Created by viktor on 14.01.16.

@@ -1,4 +1,4 @@
-package com.ua.viktor.social.authentication;
+package com.ua.viktor.github.authentication;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
@@ -15,19 +15,17 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.ua.viktor.social.MainActivity;
-import com.ua.viktor.social.R;
-import com.ua.viktor.social.ServiceGenerator;
-import com.ua.viktor.social.UserService;
-import com.ua.viktor.social.model.Users;
-import com.ua.viktor.social.utils.Constants;
+import com.ua.viktor.github.MainActivity;
+import com.ua.viktor.github.R;
+import com.ua.viktor.github.model.Users;
+import com.ua.viktor.github.retrofit.ServiceGenerator;
+import com.ua.viktor.github.retrofit.UserService;
+import com.ua.viktor.github.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
-import retrofit.Retrofit;
 
 
 public class LoginActivity extends AccountAuthenticatorActivity {
@@ -150,12 +148,11 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         UserService client = ServiceGenerator.createService(UserService.class);
 
         // Fetch and print a list of the contributors to this library.
-        retrofit.Call<Users> call = client.contributors(accessToken);
+        retrofit2.Call<Users> call = client.contributors(accessToken);
 
-        call.enqueue(new retrofit.Callback<Users>() {
+        call.enqueue(new retrofit2.Callback<Users>() {
             @Override
-            public void onResponse(final retrofit.Response<Users> response, Retrofit retrofit) {
-
+            public void onResponse(final retrofit2.Response<Users> response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -163,7 +160,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                     }
                 });
             }
-
 
             @Override
             public void onFailure(Throwable t) {
