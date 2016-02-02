@@ -26,20 +26,20 @@ import retrofit2.Response;
 public class RepositoriesFragment extends Fragment {
     private Call<List<Repositories>> call;
     private RepositoriesAdapter mRepositoriesAdapter;
-    private static final String ARG_PARAM1 = "param1";
-    private  List<Repositories> mRepositoriesList;
+    private static final String KEY_REQ = "key";
+    private List<Repositories> mRepositoriesList;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String key;
 
     public RepositoriesFragment() {
         // Required empty public constructor
     }
 
-    public static RepositoriesFragment newInstance(String param1) {
+    public static RepositoriesFragment newInstance(String key) {
         RepositoriesFragment fragment = new RepositoriesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(KEY_REQ, key);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +48,7 @@ public class RepositoriesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            key = getArguments().getString(KEY_REQ);
         }
     }
 
@@ -58,23 +58,25 @@ public class RepositoriesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_repositories, container, false);
 
-
         mRepositoriesAdapter = new RepositoriesAdapter(mRepositoriesList);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.repo_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(mRepositoriesAdapter);
-mRepositoriesAdapter.SetOnClickListener(new RepositoriesAdapter.OnItemClickListener() {
-    @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(getContext(),""+position,Toast.LENGTH_SHORT).show();
-    }
-});
+        mRepositoriesAdapter.SetOnClickListener(new RepositoriesAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         RepositoryService client = ServiceGenerator.createService(RepositoryService.class);
-        if (mParam1.equals("lol")) {
-            call = client.userRepositories("7space7", Constants.CLIENT_ID,Constants.CLIENT_SECRET);
-        } else if (mParam1.equals("lolka")) {
-            call = client.repoStarred("7space7",Constants.CLIENT_ID,Constants.CLIENT_SECRET);
+
+        if (key.equals(Constants.KEY_YOUR)) {
+            call = client.userRepositories("7space7", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+        } else if (key.equals(Constants.KEY_STARRED)) {
+            call = client.repoStarred("7space7", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+        }else if(key.equals(Constants.KEY_WATCHED)){
+            call = client.repoStarred("7space7", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         }
 
         call.enqueue(new Callback<List<Repositories>>() {
@@ -93,8 +95,9 @@ mRepositoriesAdapter.SetOnClickListener(new RepositoriesAdapter.OnItemClickListe
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDetach() {
+        super.onDetach();
         call.cancel();
     }
+
 }

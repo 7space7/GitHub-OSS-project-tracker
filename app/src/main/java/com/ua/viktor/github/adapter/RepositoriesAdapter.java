@@ -33,7 +33,7 @@ public class RepositoriesAdapter extends RecyclerView.Adapter<RepositoriesAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
       Repositories repositories=mRepositories.get(position);
-        holder.nameRepo.setText(repositories.getName());
+        holder.nameRepo.setText(repositories.getOwner().avatar_url);
     }
     public interface OnItemClickListener {
         public void onItemClick(View view, int position);

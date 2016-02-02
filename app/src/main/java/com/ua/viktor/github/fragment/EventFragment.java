@@ -3,7 +3,6 @@ package com.ua.viktor.github.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +32,11 @@ public class EventFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,16 +44,14 @@ public class EventFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.event_fragment, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Events");
-
 
         EventService client = ServiceGenerator.createService(EventService.class);
-        call = client.userEvent("7space7", Constants.CLIENT_ID,Constants.CLIENT_SECRET);
+        call = client.userEvent("7space7", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         call.enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Response<List<Event>> response) {
                 List<Event> list = response.body();
-                Log.v("TAG", "" + list.get(0).actor.getLogin());
+                Log.v("TAG", "" + list.get(0).getActor().getLogin());
             }
 
             @Override
@@ -61,10 +63,8 @@ public class EventFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDetach() {
+        super.onDetach();
         call.cancel();
     }
-
-
 }

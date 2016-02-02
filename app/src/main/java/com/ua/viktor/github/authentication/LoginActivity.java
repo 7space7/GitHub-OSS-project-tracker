@@ -148,7 +148,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         UserService client = ServiceGenerator.createService(UserService.class);
 
         // Fetch and print a list of the contributors to this library.
-        retrofit2.Call<Users> call = client.contributors(accessToken);
+        retrofit2.Call<Users> call = client.getUserA(accessToken);
 
         call.enqueue(new retrofit2.Callback<Users>() {
             @Override
@@ -156,7 +156,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        addAccountManager(accessToken, response.body().login);
+                        addAccountManager(accessToken, response.body().getLogin());
                     }
                 });
             }

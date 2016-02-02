@@ -4,6 +4,7 @@ import com.ua.viktor.github.model.Users;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 
@@ -12,7 +13,13 @@ import retrofit2.http.Query;
  */
 public interface UserService {
     @GET("/user")
-    Call<Users> contributors(
+    Call<Users> getUserA(
             @Query("access_token") String token
     );
+
+    @GET("/user/{owner}")
+    Call<Users> getUser(
+            @Path("owner") String owner
+    );
+
 }

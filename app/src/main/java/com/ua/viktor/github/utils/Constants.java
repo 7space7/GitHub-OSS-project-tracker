@@ -13,5 +13,10 @@ public final class Constants {
     public static final String REDIRECT_URI = "your://redirecturi";
     public static final String API_BASE_URL = "https://github.com/login/oauth/";
 
+    public static final String KEY_YOUR="yours";
+    public static final String KEY_STARRED="starred";
+    public static final String KEY_WATCHED="watched";
+
     public static final String GITHUB_API_KEY ="gitHubApiToken";
+    public static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 }

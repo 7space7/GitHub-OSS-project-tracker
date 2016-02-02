@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +29,13 @@ public class RepositoryPager extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.repository_pager, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Repositories");
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Repositories");
 
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("YOURS"));
         tabLayout.addTab(tabLayout.newTab().setText("STARRED"));
-       // tabLayout.addTab(tabLayout.newTab().setText("WATCHED"));
+        tabLayout.addTab(tabLayout.newTab().setText("WATCHED"));
        // tabLayout.addTab(tabLayout.newTab().setText("CONTRIBUTED"));
       //  tabLayout.addTab(tabLayout.newTab().setText("FROM ORGANIZATIONS"));
 

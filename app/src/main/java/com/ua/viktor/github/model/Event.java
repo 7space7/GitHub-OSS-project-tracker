@@ -4,9 +4,9 @@ package com.ua.viktor.github.model;
  * Created by viktor on 28.01.16.
  */
 public class Event {
-    public String type;
-    public String id;
-    public Actor actor;
+    private String type;
+    private String id;
+    private Actor actor;
     private Payload payload;
 
     public Payload getPayload() {
@@ -45,7 +45,7 @@ public class Event {
     }
 
     public static class Payload {
-        public String head;
+        private String head;
 
         public String getHead() {
             return head;

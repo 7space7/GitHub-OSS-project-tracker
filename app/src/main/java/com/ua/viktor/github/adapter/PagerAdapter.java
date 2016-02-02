@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.ua.viktor.github.fragment.RepositoriesFragment;
+import com.ua.viktor.github.utils.Constants;
 
 /**
  * Created by viktor on 27.01.16.
@@ -22,27 +23,19 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                Fragment tab1 = RepositoriesFragment.newInstance("lol");
+                Fragment tab1 = RepositoriesFragment.newInstance(Constants.KEY_YOUR);
                 return tab1;
             case 1:
-                Fragment tab2 = RepositoriesFragment.newInstance("lolka");
+                Fragment tab2 = RepositoriesFragment.newInstance(Constants.KEY_STARRED);
             return tab2;
-
+            case 2:
+                Fragment tab3 = RepositoriesFragment.newInstance(Constants.KEY_WATCHED);
+                return tab3;
             default:
                 return null;
         }
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "First Tab";
-            case 1:
-            default:
-                return "Second Tab";
-        }
-    }
 
     @Override
     public int getCount() {
