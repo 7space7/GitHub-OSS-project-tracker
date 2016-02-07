@@ -1,5 +1,7 @@
 package com.ua.viktor.github.utils;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 
 /**
@@ -16,4 +18,16 @@ public class Utils {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
+
+    public static String getUserAuthName(Context context)
+    {
+        AccountManager accountManager = AccountManager.get(context);
+        String accountType = "com.github";
+        String authType = "password";
+        Account[] accounts = accountManager.getAccountsByType(accountType);
+        Account account = accounts.length != 0 ? accounts[0] : null;
+        String authName = account.name;
+        return authName;
+    }
+
 }

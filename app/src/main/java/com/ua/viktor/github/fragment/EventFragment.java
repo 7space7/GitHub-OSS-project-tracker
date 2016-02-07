@@ -3,12 +3,15 @@ package com.ua.viktor.github.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ua.viktor.github.R;
+import com.ua.viktor.github.adapter.EventAdapter;
 import com.ua.viktor.github.model.Event;
 import com.ua.viktor.github.retrofit.EventService;
 import com.ua.viktor.github.retrofit.ServiceGenerator;
@@ -27,6 +30,9 @@ import retrofit2.Response;
 public class EventFragment extends Fragment {
 
     private Call<List<Event>> call;
+    private EventAdapter mEventAdapter;
+    private RecyclerView mRecyclerView;
+    private List<Event> mEvents;
 
     public EventFragment() {
         // Required empty public constructor
@@ -43,15 +49,16 @@ public class EventFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.event_fragment, container, false);
-
+        getActivity().setTitle("Events");
+        initializeScreen(view);
 
         EventService client = ServiceGenerator.createService(EventService.class);
         call = client.userEvent("7space7", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         call.enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Response<List<Event>> response) {
-                List<Event> list = response.body();
-                Log.v("TAG", "" + list.get(0).getActor().getLogin());
+                mEvents = response.body();
+                mEventAdapter.swapList(mEvents);
             }
 
             @Override
@@ -59,12 +66,15 @@ public class EventFragment extends Fragment {
                 Log.v("TAG", "error");
             }
         });
+
+        mRecyclerView.setAdapter(mEventAdapter);
         return view;
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        call.cancel();
+
+    private void initializeScreen(View rootView) {
+        mEventAdapter = new EventAdapter(mEvents);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.event_list);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 }

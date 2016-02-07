@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_margin="1dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    >
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+        >
+
+        <ImageView
+            android:layout_height="48dp"
+            android:layout_width="48dp"
+            android:id="@+id/user_logo"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:adjustViewBounds="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/text_eventName"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/user_logo"
+            android:layout_toEndOf="@+id/user_logo"
+            android:layout_marginRight="16dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_eventTime"
+            android:layout_alignBottom="@+id/user_logo"
+            android:layout_alignLeft="@+id/text_eventName"
+            android:layout_alignStart="@+id/text_eventName"
+            android:textSize="13sp"
+            android:layout_alignRight="@+id/text_eventName"
+            android:layout_alignEnd="@+id/text_eventName"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

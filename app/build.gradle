@@ -106,6 +106,8 @@ dependencies {
     compile 'io.realm:realm-android:0.87.2'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    
 }
 
 // Robolectric config

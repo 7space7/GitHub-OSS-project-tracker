@@ -8,6 +8,11 @@ public class Event {
     private String id;
     private Actor actor;
     private Payload payload;
+    private Repo repo;
+
+    public Repo getRepo() {
+        return repo;
+    }
 
     public Payload getPayload() {
         return payload;
@@ -46,9 +51,26 @@ public class Event {
 
     public static class Payload {
         private String head;
+        private String action;
+
+        public String getAction() {
+            return action;
+        }
 
         public String getHead() {
             return head;
+        }
+    }
+    public static class Repo{
+        private String name;
+        private String url;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getUrl() {
+            return url;
         }
     }
 

@@ -10,15 +10,16 @@ import android.widget.TextView;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.model.Repositories;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by viktor on 28.01.16.
  */
 public class RepositoriesAdapter extends RecyclerView.Adapter<RepositoriesAdapter.ViewHolder> {
-    private List<Repositories> mRepositories;
+    private ArrayList<Repositories> mRepositories;
     private OnItemClickListener mOnClickListener;
-    public RepositoriesAdapter(List<Repositories> repositories) {
+
+    public RepositoriesAdapter(ArrayList<Repositories> repositories) {
         this.mRepositories = repositories;
     }
 
@@ -32,9 +33,13 @@ public class RepositoriesAdapter extends RecyclerView.Adapter<RepositoriesAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-      Repositories repositories=mRepositories.get(position);
-        holder.nameRepo.setText(repositories.getOwner().avatar_url);
+        Repositories repositories = mRepositories.get(position);
+        holder.nameRepo.setText(repositories.getName());
+        holder.starred.setText("" + repositories.getStargazers_count());
+        holder.forks.setText("" + repositories.getForks_count());
+        holder.textDescr.setText(repositories.getDescription());
     }
+
     public interface OnItemClickListener {
         public void onItemClick(View view, int position);
     }
@@ -45,7 +50,7 @@ public class RepositoriesAdapter extends RecyclerView.Adapter<RepositoriesAdapte
 
     @Override
     public int getItemCount() {
-        if (mRepositories == null){
+        if (mRepositories == null) {
             return -1;
         }
         return mRepositories.size();
@@ -53,9 +58,16 @@ public class RepositoriesAdapter extends RecyclerView.Adapter<RepositoriesAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView nameRepo;
+        public TextView starred;
+        public TextView forks;
+        public TextView textDescr;
+
         public ViewHolder(View itemView, Context context) {
             super(itemView);
-            nameRepo= (TextView) itemView.findViewById(R.id.reponame);
+            nameRepo = (TextView) itemView.findViewById(R.id.reponame);
+            starred = (TextView) itemView.findViewById(R.id.starredNum);
+            forks = (TextView) itemView.findViewById(R.id.forksNum);
+            textDescr = (TextView) itemView.findViewById(R.id.textdescr);
             itemView.setOnClickListener(this);
         }
 
@@ -66,7 +78,8 @@ public class RepositoriesAdapter extends RecyclerView.Adapter<RepositoriesAdapte
             }
         }
     }
-    public void swapList(List<Repositories> items){
+
+    public void swapList(ArrayList<Repositories> items) {
         this.mRepositories = items;
         notifyDataSetChanged();
     }
