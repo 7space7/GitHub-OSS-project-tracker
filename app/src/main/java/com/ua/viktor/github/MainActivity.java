@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ua.viktor.github.fragment.EventFragment;
+import com.ua.viktor.github.fragment.PeopleOrgPager;
 import com.ua.viktor.github.fragment.RepositoryPager;
 import com.ua.viktor.github.utils.Constants;
 
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -91,13 +93,16 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_event:
                 fragment = new EventFragment();
                 title = "Events";
-
                 break;
             case R.id.nav_repository:
                 fragment = new RepositoryPager();
                 title = "Repositories";
                 break;
-        }
+            case R.id.nav_people:
+                fragment=new PeopleOrgPager();
+                title="People & Organizations";
+                break;
+             }
 
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

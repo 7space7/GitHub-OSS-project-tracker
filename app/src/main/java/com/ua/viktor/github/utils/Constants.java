@@ -17,6 +17,10 @@ public final class Constants {
     public static final String KEY_STARRED="starred";
     public static final String KEY_WATCHED="watched";
 
+    public static final String KEY_FOLLOWING="following";
+    public static final String KEY_FOLLOWERS="followers";
+    public static final String KEY_ORGANIZATIONS="organizations";
+
     public static final String GITHUB_API_KEY ="gitHubApiToken";
     public static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 }

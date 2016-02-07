@@ -1,30 +1,37 @@
 package com.ua.viktor.github.retrofit;
 
 
-import com.ua.viktor.github.model.Event;
+import com.ua.viktor.github.model.Organizations;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by viktor on 02.02.16.
  */
 public interface OrganizationService {
     @GET("/users/{owner}/orgs")
-    Call<List<Event>> getOrgs(
-            @Path("owner") String owner
+    Call<ArrayList<Organizations>> getOrgs(
+            @Path("owner") String owner,
+            @Query("client_id") String client_id,
+            @Query("client_secret") String client_secret
     );
 
     @GET("/users/{owner}/following")
-    Call<List<Event>> getFollowing(
-            @Path("owner") String owner
+    Call<ArrayList<Organizations>> getFollowing(
+            @Path("owner") String owner,
+            @Query("client_id") String client_id,
+            @Query("client_secret") String client_secret
     );
 
     @GET("/users/{owner}/followers")
-    Call<List<Event>> getFollowers(
-            @Path("owner") String owner
+    Call<ArrayList<Organizations>> getFollowers(
+            @Path("owner") String owner,
+            @Query("client_id") String client_id,
+            @Query("client_secret") String client_secret
     );
 }

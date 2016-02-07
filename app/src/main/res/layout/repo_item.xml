@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+                android:foreground="?attr/selectableItemBackground"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
@@ -19,7 +20,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:id="@+id/ic_starred"
-        android:src="@drawable/ic_action_octicon_star_add_256_0_000000_none"
+        android:src="@drawable/ic_star"
         android:layout_below="@+id/ic_forks"
         android:layout_alignLeft="@+id/ic_forks"
         android:layout_alignStart="@+id/ic_forks"
@@ -80,6 +81,7 @@
         android:ellipsize="end"
         android:textColor="@color/background_material_dark"
         android:maxLines="2"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"/>
 
 </RelativeLayout>

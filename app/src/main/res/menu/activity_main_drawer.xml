@@ -1,50 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/group_" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_event"
-            android:icon="@drawable/ic_action_1454466756_calendar"
+            android:icon="@drawable/ic_calendar"
             android:title="Event"/>
         <item
             android:id="@+id/nav_repository"
-            android:icon="@drawable/ic_action_ic_repo"
+            android:icon="@drawable/ic_repo"
             android:title="Repositories"/>
         <item
             android:id="@+id/nav_people"
-            android:icon="@drawable/ic_action_ic_person"
+            android:icon="@drawable/ic_person"
             android:title="People &amp; Organizations"/>
         <item
             android:id="@+id/nav_gist"
-            android:icon="@drawable/ic_action_file_code"
+            android:icon="@drawable/ic_gist"
             android:title="Gist"/>
     </group>
 
-    <item android:title="">
-        <menu>
+    <group android:id="@+id/group_settings" android:checkableBehavior="single">
+
             <item
                 android:id="@+id/nav_notification"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_bell"
                 android:title="Notifications"/>
             <item
                 android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_gear"
                 android:title="Settings"
                 />
-        </menu>
-    </item>
-    <item android:title="">
-        <menu>
+    </group>
+    <group android:id="@+id/group_feature" android:checkableBehavior="single">
+
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_action_octicon"
                 android:title="About"/>
             <item
                 android:id="@+id/nav_sign_out"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/ic_sign_out"
                 android:title="Sign out"/>
-        </menu>
-    </item>
+    </group>
 
 
 </menu>
