@@ -1,7 +1,11 @@
 package com.ua.viktor.github.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,7 @@ import java.util.List;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private List<Event> mEvents;
     private OnItemClickListener mOnClickListener;
+
     public EventAdapter(List<Event> events) {
         this.mEvents = events;
     }
@@ -35,16 +40,62 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Event event=mEvents.get(position);
+        Event event = mEvents.get(position);
 
-        holder.nameEvent.setText(event.getActor().getLogin()+" "+event.getRepo().getName());
-        Context context=holder.userLogo.getContext();
+        Context context = holder.userLogo.getContext();
+        String typeName = "";
+        switch (event.getType()) {
+            case "PushEvent":
+                typeName="pushed to";
+                break;
+            case "IssueCommentEvent":
+                typeName="commented on issue";
+                break;
+            case "MemberEvent":
+                typeName="";
+                break;
+            case "IssuesEvent":
+                typeName="commented on issue";
+                break;
+            case "GollumEvent":
+                typeName="opened";
+                break;
+            case "WatchEvent":
+                typeName="starred";
+                break;
+            case "CreateEvent":
+                typeName="created repository";
+                break;
+        }
+        if(typeName.equals("")){
+            typeName=event.getType();
+        }
+        int sizeLogin = event.getActor().getLogin().length();
+        int sizeType = typeName.length();
+        int sizeRepo = event.getRepo().getName().length();
+        int preSize = sizeLogin + sizeType + 1;
+        int size = sizeLogin + sizeType + sizeRepo + 2;
+
+
+
+        SpannableStringBuilder eventName = new SpannableStringBuilder(event.getActor().getLogin() + " " + typeName + " " + event.getRepo().getName());
+
+        StyleSpan bss = new StyleSpan(Typeface.BOLD);
+        StyleSpan iss = new StyleSpan(Typeface.BOLD_ITALIC);
+
+        eventName.setSpan(bss, 0, sizeLogin, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        eventName.setSpan(iss, preSize, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        holder.nameEvent.setText(eventName);
+
+        holder.time.setText(event.getCreated_at());
 
         Picasso.with(context).load(event.getActor().getAvatar_url())
                 .transform(new CircleTransform())
                 .into(holder.userLogo);
 
     }
+
     public interface OnItemClickListener {
         public void onItemClick(View view, int position);
     }
@@ -55,7 +106,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        if (mEvents == null){
+        if (mEvents == null) {
             return -1;
         }
         return mEvents.size();
@@ -68,9 +119,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         public ViewHolder(View itemView, Context context) {
             super(itemView);
-            nameEvent= (TextView) itemView.findViewById(R.id.text_eventName);
-            time=(TextView)itemView.findViewById(R.id.text_eventTime);
-            userLogo=(ImageView)itemView.findViewById(R.id.user_logo);
+            nameEvent = (TextView) itemView.findViewById(R.id.text_eventName);
+            time = (TextView) itemView.findViewById(R.id.text_eventTime);
+            userLogo = (ImageView) itemView.findViewById(R.id.user_logo);
 
 
             itemView.setOnClickListener(this);
@@ -83,7 +134,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             }
         }
     }
-    public void swapList(List<Event> items){
+
+    public void swapList(List<Event> items) {
         this.mEvents = items;
         notifyDataSetChanged();
     }

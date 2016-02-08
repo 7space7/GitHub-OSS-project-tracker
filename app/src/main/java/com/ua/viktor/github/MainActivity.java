@@ -1,6 +1,11 @@
 package com.ua.viktor.github;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ua.viktor.github.authentication.LoginActivity;
 import com.ua.viktor.github.fragment.EventFragment;
 import com.ua.viktor.github.fragment.PeopleOrgPager;
 import com.ua.viktor.github.fragment.RepositoryPager;
@@ -21,7 +27,9 @@ import com.ua.viktor.github.utils.Constants;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG =MainActivity.class.getName() ;
     private int mCurrentSelectedPosition = 0;
+    private AccountManager mAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +46,7 @@ public class MainActivity extends AppCompatActivity
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        
+
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,6 +110,11 @@ public class MainActivity extends AppCompatActivity
                 fragment=new PeopleOrgPager();
                 title="People & Organizations";
                 break;
+            case R.id.nav_sign_out:
+                logOut();
+
+
+                break;
              }
 
         if (fragment != null) {
@@ -134,6 +147,30 @@ public class MainActivity extends AppCompatActivity
         displayView(position);
         return true;
     }
+    public void logOut() {
+        mAccountManager = AccountManager.get(getApplicationContext());
+        String accountType = "com.github";
+        String authType = "password";
+        Account[] accounts = mAccountManager.getAccountsByType(accountType);
+        Account account = accounts.length != 0 ?  accounts[0] : null;
 
+        if (accounts.length > 0) {
+            mAccountManager.removeAccount(account, new AccountManagerCallback<Boolean>() {
+                @Override
+                public void run(AccountManagerFuture<Boolean> future) {
+                    try {
+                        if (future.getResult()) {
+                            Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }, null);
+
+        }
+    }
 
 }

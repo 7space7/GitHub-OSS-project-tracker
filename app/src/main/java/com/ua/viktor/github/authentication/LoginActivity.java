@@ -54,7 +54,14 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             }
         });
 
-        // to get account manager
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         AccountManager accountManager = AccountManager.get(getApplicationContext());
         String accountType = "com.github";
         String authType = "password";
@@ -64,19 +71,15 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             String authToken = accountManager.peekAuthToken(account, authType);
 
             if (authToken != null) {
-                finish();
+                //finish();
                 Intent intentM = new Intent(LoginActivity.this, MainActivity.class);
-                intentM.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intentM.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intentM);
+                finish();
             }
         }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         authorization();
+
     }
 
 

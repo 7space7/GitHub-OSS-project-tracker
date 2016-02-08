@@ -6,6 +6,7 @@ package com.ua.viktor.github.model;
 public class Event {
     private String type;
     private String id;
+    private String created_at;
     private Actor actor;
     private Payload payload;
     private Repo repo;
@@ -28,6 +29,10 @@ public class Event {
 
     public Actor getActor() {
         return actor;
+    }
+
+    public String getCreated_at() {
+        return created_at;
     }
 
     public static class Actor {
@@ -61,7 +66,8 @@ public class Event {
             return head;
         }
     }
-    public static class Repo{
+
+    public static class Repo {
         private String name;
         private String url;
 

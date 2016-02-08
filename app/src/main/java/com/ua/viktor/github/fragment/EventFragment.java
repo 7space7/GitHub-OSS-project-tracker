@@ -1,6 +1,8 @@
 package com.ua.viktor.github.fragment;
 
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,7 +53,15 @@ public class EventFragment extends Fragment {
         View view = inflater.inflate(R.layout.event_fragment, container, false);
         getActivity().setTitle("Events");
         initializeScreen(view);
-
+        AccountManager accountManager = AccountManager.get(getContext());
+        String accountType = "com.github";
+        String authType = "password";
+        Account[] accounts = accountManager.getAccountsByType(accountType);
+        Account account = accounts.length != 0 ?  accounts[0] : null;
+        if (account!=null) {
+            String authToken = accountManager.peekAuthToken(account, authType);
+            Log.v("auth",authToken);
+        }
         EventService client = ServiceGenerator.createService(EventService.class);
         call = client.userEvent("7space7", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         call.enqueue(new Callback<List<Event>>() {
