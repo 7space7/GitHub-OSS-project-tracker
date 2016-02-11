@@ -39,7 +39,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         setContentView(R.layout.activity_login);
 
 
-        Button loginButton = (Button) findViewById(R.id.loginbutton);
+        Button loginButton = (Button) findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,15 +53,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                 }
             }
         });
-
-
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         AccountManager accountManager = AccountManager.get(getApplicationContext());
         String accountType = "com.github";
         String authType = "password";
@@ -71,13 +62,21 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             String authToken = accountManager.peekAuthToken(account, authType);
 
             if (authToken != null) {
-                //finish();
                 Intent intentM = new Intent(LoginActivity.this, MainActivity.class);
                 intentM.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intentM);
                 finish();
             }
         }
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         authorization();
 
     }

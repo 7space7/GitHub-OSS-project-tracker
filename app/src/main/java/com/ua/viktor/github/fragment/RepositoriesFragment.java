@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.RepositoriesAdapter;
@@ -56,7 +55,6 @@ public class RepositoriesFragment extends Fragment {
         if (getArguments() != null) {
             key = getArguments().getString(KEY_REQ);
         }
-
     }
 
     @Override
@@ -76,15 +74,21 @@ public class RepositoriesFragment extends Fragment {
         if (savedInstanceState == null) {
             getRepositoryRequest(view);
         } else {
+
             mRepositoriesList = savedInstanceState.getParcelableArrayList(REPO_KEY);
-            mRepositoriesAdapter.swapList(mRepositoriesList);
+            int size = (mRepositoriesList == null) ? 0 : mRepositoriesList.size();
+            if (mRepositoriesList != null&&size!=0) {
+                mRepositoriesAdapter.swapList(mRepositoriesList);
+            } else {
+                setErrorView(view);
+            }
         }
 
         mRecyclerView.setAdapter(mRepositoriesAdapter);
         mRepositoriesAdapter.SetOnClickListener(new RepositoriesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -92,9 +96,9 @@ public class RepositoriesFragment extends Fragment {
         return view;
     }
 
-    public void getRepositoryRequest(View rootView) {
+    public void getRepositoryRequest(final View rootView) {
 
-        mErrorView = (ErrorView) rootView.findViewById(R.id.error_view);
+
         String authName = Utils.getUserAuthName(getActivity());
 
         RepositoryService client = ServiceGenerator.createService(RepositoryService.class);
@@ -112,23 +116,41 @@ public class RepositoriesFragment extends Fragment {
             public void onResponse(Response<ArrayList<Repositories>> response) {
                 mRepositoriesList = response.body();
                 Log.v("count", "call");
-                mRepositoriesAdapter.swapList(mRepositoriesList);
+                int size = (mRepositoriesList == null) ? 0 : mRepositoriesList.size();
+                if (mRepositoriesList != null&&size!=0) {
+                    mRepositoriesAdapter.swapList(mRepositoriesList);
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mErrorView.setVisibility(View.GONE);
+                } else {
+                    setErrorView(rootView);
+                }
 
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Log.v("Error", t.getLocalizedMessage());
-
-
+                setErrorView(rootView);
             }
         });
     }
 
     private void initializeScreen(View rootView) {
+        mErrorView = (ErrorView) rootView.findViewById(R.id.error_view);
         mRepositoriesAdapter = new RepositoriesAdapter(mRepositoriesList);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.repo_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+    public void setErrorView(final View view) {
+
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.VISIBLE);
+        mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                getRepositoryRequest(view);
+            }
+        });
+    }
 }

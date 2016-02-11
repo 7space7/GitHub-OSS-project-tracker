@@ -32,6 +32,7 @@ import tr.xip.errorview.ErrorView;
  * create an instance of this fragment.
  */
 public class PeopleOrgFragment extends Fragment {
+    private static final String ORG_KEY = "org";
     private PeopleOrgAdapter mPeopleOrgAdapter;
     private RecyclerView mRecyclerView;
     private ArrayList<Organizations> mList;
@@ -55,6 +56,12 @@ public class PeopleOrgFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(ORG_KEY, mList);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -68,15 +75,27 @@ public class PeopleOrgFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_people_org, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.org_list);
-        getPeopleOrgRequest(view);
+        mErrorView = (ErrorView) view.findViewById(R.id.error_view_org);
 
+        if (savedInstanceState == null) {
+            getPeopleOrgRequest(view);
+        } else {
+
+            mList = savedInstanceState.getParcelableArrayList(ORG_KEY);
+            int size = (mList == null) ? 0 : mList.size();
+            if (mList != null&&size!=0) {
+                initializeAdapter(view);
+            } else {
+                setErrorView(view);
+            }
+        }
         return view;
 
     }
 
     public void getPeopleOrgRequest(final View rootView) {
 
-        mErrorView = (ErrorView) rootView.findViewById(R.id.error_view);
+
         String authName = Utils.getUserAuthName(getActivity());
 
         OrganizationService client = ServiceGenerator.createService(OrganizationService.class);
@@ -97,13 +116,19 @@ public class PeopleOrgFragment extends Fragment {
             @Override
             public void onResponse(Response<ArrayList<Organizations>> response) {
                 mList = response.body();
-               initializeAdapter(rootView);
+                int size = (mList == null) ? 0 : mList.size();
+                if (mList != null&&size!=0) {
+                    initializeAdapter(rootView);
+                } else {
+                    setErrorView(rootView);
+                }
+                Log.v("Call",""+mList.isEmpty());
             }
 
             @Override
             public void onFailure(Throwable t) {
                 Log.v("Error", t.getLocalizedMessage());
-
+                setErrorView(rootView);
 
             }
         });
@@ -118,5 +143,17 @@ public class PeopleOrgFragment extends Fragment {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         }
         mRecyclerView.setHasFixedSize(true);
+    }
+
+    public void setErrorView(final View view) {
+
+        mRecyclerView.setVisibility(View.GONE);
+        mErrorView.setVisibility(View.VISIBLE);
+        mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
+            @Override
+            public void onRetry() {
+                getPeopleOrgRequest(view);
+            }
+        });
     }
 }

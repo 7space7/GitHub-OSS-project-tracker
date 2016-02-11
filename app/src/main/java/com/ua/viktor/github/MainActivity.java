@@ -161,7 +161,9 @@ public class MainActivity extends AppCompatActivity
                     try {
                         if (future.getResult()) {
                             Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             startActivity(intent);
+                            finish();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
