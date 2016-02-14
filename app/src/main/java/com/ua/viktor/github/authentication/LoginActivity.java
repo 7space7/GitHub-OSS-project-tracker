@@ -57,8 +57,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         String accountType = "com.github";
         String authType = "password";
         Account[] accounts = accountManager.getAccountsByType(accountType);
-        Account account = accounts.length != 0 ?  accounts[0] : null;
-        if (account!=null) {
+        Account account = accounts.length != 0 ? accounts[0] : null;
+        if (account != null) {
             String authToken = accountManager.peekAuthToken(account, authType);
 
             if (authToken != null) {
@@ -80,7 +80,6 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         authorization();
 
     }
-
 
 
     public void authorization() {
@@ -108,8 +107,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                         JSONObject jsonAcess = null;
                         try {
                             jsonAcess = new JSONObject(json);
-                             String accessToken = jsonAcess.getString("access_token");
-                            if (accessToken!=null) {
+                            String accessToken = jsonAcess.getString("access_token");
+                            if (accessToken != null) {
                                 getUserLogin(accessToken);
                             }
                         } catch (JSONException e) {
@@ -124,12 +123,18 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             }
         }
     }
-    public void  addAccountManager(String access_token,String username){
+
+    public void addAccountManager(String access_token, String username, String userLogo, String fullName) {
         String accountType = "com.github";
 
         Account account = new Account(username, "com.github");
         AccountManager accountManager = AccountManager.get(getApplicationContext());
-        accountManager.addAccountExplicitly(account, null, null);
+
+        Bundle extraData = new Bundle();
+        extraData.putString(Constants.KEY_USER_LOGO, userLogo);
+        extraData.putString(Constants.KEY_USER_NAME, fullName);
+
+        accountManager.addAccountExplicitly(account, null, extraData);
         String authType = "password";
         String authToken = access_token;
         accountManager.setAuthToken(account, authType, authToken);
@@ -146,7 +151,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         startActivity(intentM);
     }
 
-    public void getUserLogin(final String accessToken){
+    public void getUserLogin(final String accessToken) {
         UserService client = ServiceGenerator.createService(UserService.class);
 
         // Fetch and print a list of the contributors to this library.
@@ -155,10 +160,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         call.enqueue(new retrofit2.Callback<Users>() {
             @Override
             public void onResponse(final retrofit2.Response<Users> response) {
+
+                final String userName = response.body().getName();
+                final String userLogo = response.body().getAvatar_url();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        addAccountManager(accessToken, response.body().getLogin());
+                        addAccountManager(accessToken, response.body().getLogin(), userLogo, userName);
                     }
                 });
             }

@@ -23,4 +23,6 @@ public final class Constants {
 
     public static final String GITHUB_API_KEY ="gitHubApiToken";
     public static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    public static final String KEY_USER_NAME = "key_user_name";
+    public static final String KEY_USER_LOGO ="user_logo" ;
 }

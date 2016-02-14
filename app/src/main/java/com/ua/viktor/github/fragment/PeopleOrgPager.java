@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ua.viktor.github.R;
-import com.ua.viktor.github.adapter.PagerOrgAdapter;
+import com.ua.viktor.github.adapter.pager.PagerOrgAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

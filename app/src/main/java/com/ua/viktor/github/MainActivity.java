@@ -17,19 +17,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.ua.viktor.github.authentication.LoginActivity;
 import com.ua.viktor.github.fragment.EventFragment;
 import com.ua.viktor.github.fragment.PeopleOrgPager;
 import com.ua.viktor.github.fragment.RepositoryPager;
+import com.ua.viktor.github.utils.CircleTransform;
 import com.ua.viktor.github.utils.Constants;
+import com.ua.viktor.github.utils.Utils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final String TAG =MainActivity.class.getName() ;
+    private ImageView mUserLogo;
+    private TextView mUseLogin;
+    private TextView mUserName;
+    private static final String TAG = MainActivity.class.getName();
     private int mCurrentSelectedPosition = 0;
     private AccountManager mAccountManager;
+    private String mUserIcon;
+    private String mUser_Name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +64,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        initializeNavigationView();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -107,20 +115,20 @@ public class MainActivity extends AppCompatActivity
                 title = "Repositories";
                 break;
             case R.id.nav_people:
-                fragment=new PeopleOrgPager();
-                title="People & Organizations";
+                fragment = new PeopleOrgPager();
+                title = "People & Organizations";
                 break;
             case R.id.nav_sign_out:
                 logOut();
 
 
                 break;
-             }
+        }
 
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flContent, fragment);
-            ft.addToBackStack("Events");
+            //ft.addToBackStack("Events");
             ft.commit();
         }
 
@@ -147,12 +155,13 @@ public class MainActivity extends AppCompatActivity
         displayView(position);
         return true;
     }
+
     public void logOut() {
         mAccountManager = AccountManager.get(getApplicationContext());
         String accountType = "com.github";
         String authType = "password";
         Account[] accounts = mAccountManager.getAccountsByType(accountType);
-        Account account = accounts.length != 0 ?  accounts[0] : null;
+        Account account = accounts.length != 0 ? accounts[0] : null;
 
         if (accounts.length > 0) {
             mAccountManager.removeAccount(account, new AccountManagerCallback<Boolean>() {
@@ -160,7 +169,7 @@ public class MainActivity extends AppCompatActivity
                 public void run(AccountManagerFuture<Boolean> future) {
                     try {
                         if (future.getResult()) {
-                            Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             startActivity(intent);
                             finish();
@@ -173,6 +182,34 @@ public class MainActivity extends AppCompatActivity
             }, null);
 
         }
+    }
+
+    public void initializeNavigationView() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+
+        mAccountManager = AccountManager.get(getApplicationContext());
+        String accountType = "com.github";
+        String authType = "password";
+        Account[] accounts = mAccountManager.getAccountsByType(accountType);
+        Account account = accounts.length != 0 ? accounts[0] : null;
+
+        mUser_Name = mAccountManager.getUserData(account, Constants.KEY_USER_NAME);
+        mUserIcon = mAccountManager.getUserData(account, Constants.KEY_USER_LOGO);
+        ;
+
+        mUserLogo = (ImageView) headerLayout.findViewById(R.id.user_logo);
+        mUseLogin = (TextView) headerLayout.findViewById(R.id.login_Name);
+        mUserName = (TextView) headerLayout.findViewById(R.id.text_eventName);
+
+        mUseLogin.setText(Utils.getUserAuthName(getApplicationContext()));
+        mUserName.setText(mUser_Name);
+        Picasso.with(getApplication()).load(mUserIcon)
+                .transform(new CircleTransform())
+                .into(mUserLogo);
+
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
 }

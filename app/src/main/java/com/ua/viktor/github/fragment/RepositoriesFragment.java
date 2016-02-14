@@ -1,5 +1,6 @@
 package com.ua.viktor.github.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pnikosis.materialishprogress.ProgressWheel;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.RepositoriesAdapter;
 import com.ua.viktor.github.model.Repositories;
@@ -33,7 +35,7 @@ public class RepositoriesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ArrayList<Repositories> mRepositoriesList;
     private ErrorView mErrorView;
-
+    private ProgressWheel progressWheel;
     // TODO: Rename and change types of parameters
     private String key;
 
@@ -108,7 +110,7 @@ public class RepositoriesFragment extends Fragment {
         } else if (key.equals(Constants.KEY_STARRED)) {
             call = client.repoStarred(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         } else if (key.equals(Constants.KEY_WATCHED)) {
-            call = client.repoWatched(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+            call = client.repoWatched("", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         }
 
         call.enqueue(new Callback<ArrayList<Repositories>>() {
@@ -136,6 +138,7 @@ public class RepositoriesFragment extends Fragment {
     }
 
     private void initializeScreen(View rootView) {
+        progressWheel = (ProgressWheel) rootView.findViewById(R.id.progress_wheel);
         mErrorView = (ErrorView) rootView.findViewById(R.id.error_view);
         mRepositoriesAdapter = new RepositoriesAdapter(mRepositoriesList);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.repo_list);
@@ -149,7 +152,18 @@ public class RepositoriesFragment extends Fragment {
         mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
             @Override
             public void onRetry() {
-                getRepositoryRequest(view);
+                progressWheel.setVisibility(View.VISIBLE);
+                progressWheel.setSpinSpeed((float) 1);
+                mErrorView.setVisibility(View.GONE);
+                progressWheel.setRimColor(Color.GRAY);
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                progressWheel.setVisibility(View.GONE);
+                                getRepositoryRequest(view);
+                            }
+                        }, 1000);
+
             }
         });
     }

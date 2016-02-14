@@ -2,6 +2,7 @@ package com.ua.viktor.github.fragment;
 
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pnikosis.materialishprogress.ProgressWheel;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.PeopleOrgAdapter;
 import com.ua.viktor.github.model.Organizations;
@@ -40,7 +42,7 @@ public class PeopleOrgFragment extends Fragment {
     private static final String KEY_QUERY = "key_org";
     private String mKeyQuery;
     private ErrorView mErrorView;
-
+    private ProgressWheel progressWheel;
 
     public PeopleOrgFragment() {
         // Required empty public constructor
@@ -76,14 +78,14 @@ public class PeopleOrgFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_people_org, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.org_list);
         mErrorView = (ErrorView) view.findViewById(R.id.error_view_org);
-
+        progressWheel = (ProgressWheel) view.findViewById(R.id.progress_wheel_org);
         if (savedInstanceState == null) {
             getPeopleOrgRequest(view);
         } else {
 
             mList = savedInstanceState.getParcelableArrayList(ORG_KEY);
             int size = (mList == null) ? 0 : mList.size();
-            if (mList != null&&size!=0) {
+            if (mList != null && size != 0) {
                 initializeAdapter(view);
             } else {
                 setErrorView(view);
@@ -117,12 +119,12 @@ public class PeopleOrgFragment extends Fragment {
             public void onResponse(Response<ArrayList<Organizations>> response) {
                 mList = response.body();
                 int size = (mList == null) ? 0 : mList.size();
-                if (mList != null&&size!=0) {
+                if (mList != null && size != 0) {
                     initializeAdapter(rootView);
                 } else {
                     setErrorView(rootView);
                 }
-                Log.v("Call",""+mList.isEmpty());
+                Log.v("Call", "" + mList.isEmpty());
             }
 
             @Override
@@ -135,6 +137,7 @@ public class PeopleOrgFragment extends Fragment {
     }
 
     private void initializeAdapter(View rootView) {
+
         mPeopleOrgAdapter = new PeopleOrgAdapter(mList);
         mRecyclerView.setAdapter(mPeopleOrgAdapter);
         if (rootView.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -152,7 +155,18 @@ public class PeopleOrgFragment extends Fragment {
         mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
             @Override
             public void onRetry() {
-                getPeopleOrgRequest(view);
+                progressWheel.setVisibility(View.VISIBLE);
+                progressWheel.setSpinSpeed((float) 1);
+                mErrorView.setVisibility(View.GONE);
+                progressWheel.setRimColor(Color.GRAY);
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                progressWheel.setVisibility(View.GONE);
+                                getPeopleOrgRequest(view);
+                            }
+                        }, 1000);
+
             }
         });
     }

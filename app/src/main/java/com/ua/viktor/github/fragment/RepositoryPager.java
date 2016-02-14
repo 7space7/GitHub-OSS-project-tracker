@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ua.viktor.github.R;
-import com.ua.viktor.github.adapter.PagerRepoAdapter;
+import com.ua.viktor.github.adapter.pager.PagerRepoAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,15 +27,15 @@ public class RepositoryPager extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.repository_pager, container, false);
+        View view = inflater.inflate(R.layout.repository_pager, container, false);
 
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("YOURS"));
         tabLayout.addTab(tabLayout.newTab().setText("STARRED"));
         tabLayout.addTab(tabLayout.newTab().setText("WATCHED"));
-       // tabLayout.addTab(tabLayout.newTab().setText("CONTRIBUTED"));
-      //  tabLayout.addTab(tabLayout.newTab().setText("FROM ORGANIZATIONS"));
+        // tabLayout.addTab(tabLayout.newTab().setText("CONTRIBUTED"));
+        //  tabLayout.addTab(tabLayout.newTab().setText("FROM ORGANIZATIONS"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
