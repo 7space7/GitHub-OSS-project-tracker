@@ -25,4 +25,6 @@ public final class Constants {
     public static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     public static final String KEY_USER_NAME = "key_user_name";
     public static final String KEY_USER_LOGO ="user_logo" ;
+    public static final String KEY_LOGIN="login";
+    public static final String KEY_URL ="user_icon_url";
 }

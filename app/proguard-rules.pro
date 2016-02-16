@@ -24,3 +24,5 @@
 -dontwarn javax.**
 -dontwarn io.realm.**
 
+
+

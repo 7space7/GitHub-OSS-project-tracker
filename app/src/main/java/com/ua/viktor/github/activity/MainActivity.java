@@ -1,4 +1,4 @@
-package com.ua.viktor.github;
+package com.ua.viktor.github.activity;
 
 
 import android.accounts.Account;
@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.ua.viktor.github.R;
 import com.ua.viktor.github.authentication.LoginActivity;
 import com.ua.viktor.github.fragment.EventFragment;
 import com.ua.viktor.github.fragment.PeopleOrgPager;
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_sign_out:
                 logOut();
-
+             case R.id.nav_about:
 
                 break;
         }
@@ -196,7 +198,8 @@ public class MainActivity extends AppCompatActivity
 
         mUser_Name = mAccountManager.getUserData(account, Constants.KEY_USER_NAME);
         mUserIcon = mAccountManager.getUserData(account, Constants.KEY_USER_LOGO);
-        ;
+        String authToken = mAccountManager.peekAuthToken(account, authType);
+        Log.v(TAG,authToken);
 
         mUserLogo = (ImageView) headerLayout.findViewById(R.id.user_logo);
         mUseLogin = (TextView) headerLayout.findViewById(R.id.login_Name);

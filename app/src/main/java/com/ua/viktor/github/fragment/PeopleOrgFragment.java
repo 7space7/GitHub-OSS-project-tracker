@@ -1,6 +1,7 @@
 package com.ua.viktor.github.fragment;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.ua.viktor.github.R;
+import com.ua.viktor.github.activity.UserDetailActivity;
 import com.ua.viktor.github.adapter.PeopleOrgAdapter;
 import com.ua.viktor.github.model.Organizations;
 import com.ua.viktor.github.retrofit.OrganizationService;
@@ -91,6 +93,7 @@ public class PeopleOrgFragment extends Fragment {
                 setErrorView(view);
             }
         }
+
         return view;
 
     }
@@ -140,6 +143,15 @@ public class PeopleOrgFragment extends Fragment {
 
         mPeopleOrgAdapter = new PeopleOrgAdapter(mList);
         mRecyclerView.setAdapter(mPeopleOrgAdapter);
+        mPeopleOrgAdapter.SetOnClickListener(new PeopleOrgAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getActivity(), UserDetailActivity.class);
+                intent.putExtra(Constants.KEY_LOGIN,mList.get(position).getLogin());
+                intent.putExtra(Constants.KEY_URL,mList.get(position).getAvatar_url());
+                startActivity(intent);
+            }
+        });
         if (rootView.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         } else {

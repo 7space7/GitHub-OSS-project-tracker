@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.pager.PagerRepoAdapter;
+import com.ua.viktor.github.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,9 +39,12 @@ public class RepositoryPager extends Fragment {
         //  tabLayout.addTab(tabLayout.newTab().setText("FROM ORGANIZATIONS"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        String authName = Utils.getUserAuthName(getActivity());
+
         final ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
         final PagerRepoAdapter adapter = new PagerRepoAdapter
-                (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
+                (getActivity().getSupportFragmentManager(), tabLayout.getTabCount(),authName);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

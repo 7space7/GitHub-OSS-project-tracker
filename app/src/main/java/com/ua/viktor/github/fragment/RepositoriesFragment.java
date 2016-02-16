@@ -17,7 +17,6 @@ import com.ua.viktor.github.model.Repositories;
 import com.ua.viktor.github.retrofit.RepositoryService;
 import com.ua.viktor.github.retrofit.ServiceGenerator;
 import com.ua.viktor.github.utils.Constants;
-import com.ua.viktor.github.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -31,6 +30,7 @@ public class RepositoriesFragment extends Fragment {
     private Call<ArrayList<Repositories>> call;
     private RepositoriesAdapter mRepositoriesAdapter;
     private static final String KEY_REQ = "key";
+    private static final String KEY_LOGIN = "key_login";
     private static String REPO_KEY = "repo";
     private RecyclerView mRecyclerView;
     private ArrayList<Repositories> mRepositoriesList;
@@ -38,15 +38,17 @@ public class RepositoriesFragment extends Fragment {
     private ProgressWheel progressWheel;
     // TODO: Rename and change types of parameters
     private String key;
+    private String mLogin;
 
     public RepositoriesFragment() {
         // Required empty public constructor
     }
 
-    public static RepositoriesFragment newInstance(String key) {
+    public static RepositoriesFragment newInstance(String key,String mLogin) {
         RepositoriesFragment fragment = new RepositoriesFragment();
         Bundle args = new Bundle();
         args.putString(KEY_REQ, key);
+        args.putString(KEY_LOGIN,mLogin);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,6 +58,7 @@ public class RepositoriesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             key = getArguments().getString(KEY_REQ);
+            mLogin=getArguments().getString(KEY_LOGIN);
         }
     }
 
@@ -101,14 +104,14 @@ public class RepositoriesFragment extends Fragment {
     public void getRepositoryRequest(final View rootView) {
 
 
-        String authName = Utils.getUserAuthName(getActivity());
+
 
         RepositoryService client = ServiceGenerator.createService(RepositoryService.class);
 
         if (key.equals(Constants.KEY_YOUR)) {
-            call = client.userRepositories(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+            call = client.userRepositories(mLogin, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         } else if (key.equals(Constants.KEY_STARRED)) {
-            call = client.repoStarred(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+            call = client.repoStarred(mLogin, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         } else if (key.equals(Constants.KEY_WATCHED)) {
             call = client.repoWatched("", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         }

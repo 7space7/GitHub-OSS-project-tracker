@@ -31,20 +31,35 @@ import tr.xip.errorview.ErrorView;
  */
 public class EventFragment extends Fragment {
 
+    private static final String KEY_LOGIN ="KEY_LOGIN" ;
     private Call<List<Event>> call;
     private EventAdapter mEventAdapter;
     private RecyclerView mRecyclerView;
     private List<Event> mEvents;
     private ErrorView mErrorView;
+    private String mLogin;
+
+
+
 
     public EventFragment() {
         // Required empty public constructor
     }
 
+    public static EventFragment newInstance(String mLogin) {
+        EventFragment fragment = new EventFragment();
+        Bundle args = new Bundle();
+        args.putString(KEY_LOGIN,mLogin);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        if (getArguments() != null) {
+            mLogin=getArguments().getString(KEY_LOGIN);
+        }
     }
 
     @Override
@@ -82,9 +97,14 @@ public class EventFragment extends Fragment {
     }
 
     private void getEventRequest(final View view) {
-        String authName = Utils.getUserAuthName(getActivity());
+
         EventService client = ServiceGenerator.createService(EventService.class);
-        call = client.userEvent(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+        if(mLogin!=null) {
+            call = client.userEvent(mLogin, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+        }else {
+            String authName = Utils.getUserAuthName(getContext());
+            call = client.userEvent(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+        }
         call.enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Response<List<Event>> response) {

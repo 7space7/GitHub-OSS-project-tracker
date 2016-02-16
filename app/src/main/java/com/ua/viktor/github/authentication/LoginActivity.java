@@ -15,7 +15,7 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.ua.viktor.github.MainActivity;
+import com.ua.viktor.github.activity.MainActivity;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.model.Users;
 import com.ua.viktor.github.retrofit.ServiceGenerator;

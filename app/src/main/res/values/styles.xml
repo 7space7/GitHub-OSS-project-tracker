@@ -16,12 +16,14 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
     <style name="Widget.Button.Login" parent="android:Widget.Button">
         <item name="android:paddingLeft">18dp</item>
         <item name="android:paddingRight">16dp</item>
         <item name="android:textSize">@dimen/login_buttons_text_size</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
     <style name="LoginCreateText">
         <item name="android:textSize">@dimen/login_buttons_text_size</item>
         <item name="android:textColor">@android:color/white</item>
