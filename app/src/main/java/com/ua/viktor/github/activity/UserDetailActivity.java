@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,13 +28,52 @@ public class UserDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-        mUserLogo = (ImageView) findViewById(R.id.user_logo_detail);
-        mUserLogin = (TextView) findViewById(R.id.user_name_detail);
 
         Intent intent = getIntent();
-        mLogin = intent.getStringExtra(Constants.KEY_LOGIN);
-        mUrl=intent.getStringExtra(Constants.KEY_URL);
 
+        mLogin = intent.getStringExtra(Constants.KEY_LOGIN);
+        mUrl = intent.getStringExtra(Constants.KEY_URL);
+
+        initializeScreen();
+
+
+        mUserLogin.setText(mLogin);
+
+        Picasso.with(getApplicationContext()).load(mUrl)
+                .transform(new CircleTransform())
+                .fit().centerInside()
+                .into(mUserLogo,
+                        PicassoPalette.with(mUrl, mUserLogo)
+                                .use(PicassoPalette.Profile.VIBRANT_LIGHT)
+                        .intoTextColor(mUserLogin)
+                );
+
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.user_detail_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_unfollow:
+                item.setTitle("UNFOLLOW");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void initializeScreen() {
+        mUserLogo = (ImageView) findViewById(R.id.user_logo_detail);
+        mUserLogin = (TextView) findViewById(R.id.user_name_detail);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_user);
         toolbar.setTitle("");
@@ -41,24 +81,10 @@ public class UserDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setSupportActionBar(toolbar);
 
-
-       /* if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.abc_color_highlight_material));
-        }*/
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_user_detail);
         tabLayout.addTab(tabLayout.newTab().setText("INFO"));
         tabLayout.addTab(tabLayout.newTab().setText("REPOSITORIES"));
         // tabLayout.addTab(tabLayout.newTab().setText("Events"));
-        Picasso.with(getApplicationContext()).load(mUrl)
-                .transform(new CircleTransform())
-                .fit().centerInside()
-                .into(mUserLogo,
-                        PicassoPalette.with(mUrl, mUserLogo)
-                                .use(PicassoPalette.Profile.MUTED_LIGHT)
-                                .intoBackground(tabLayout)
-                                .intoTextColor(mUserLogin)
-                );
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -83,17 +109,5 @@ public class UserDetailActivity extends AppCompatActivity {
 
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

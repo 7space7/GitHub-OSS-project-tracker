@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         debug {
@@ -109,7 +110,7 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.florent37:picassopalette:1.0.2@aar'
-
+    compile 'com.android.support:multidex:1.0.0'
 
     compile 'com.pnikosis:materialish-progress:1.7'
 

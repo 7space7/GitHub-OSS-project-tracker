@@ -113,7 +113,7 @@ public class RepositoriesFragment extends Fragment {
         } else if (key.equals(Constants.KEY_STARRED)) {
             call = client.repoStarred(mLogin, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         } else if (key.equals(Constants.KEY_WATCHED)) {
-            call = client.repoWatched("", Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+            call = client.repoWatched(mLogin, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
         }
 
         call.enqueue(new Callback<ArrayList<Repositories>>() {
