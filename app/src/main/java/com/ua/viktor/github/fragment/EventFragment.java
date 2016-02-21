@@ -16,6 +16,7 @@ import com.ua.viktor.github.model.Event;
 import com.ua.viktor.github.retrofit.EventService;
 import com.ua.viktor.github.retrofit.ServiceGenerator;
 import com.ua.viktor.github.utils.Constants;
+import com.ua.viktor.github.utils.TimeStampFormatter;
 import com.ua.viktor.github.utils.Utils;
 
 import java.util.List;
@@ -79,7 +80,7 @@ public class EventFragment extends Fragment {
 
     private void initializeScreen(View rootView) {
         mErrorView = (ErrorView) rootView.findViewById(R.id.error_view_event);
-        mEventAdapter = new EventAdapter(mEvents);
+        mEventAdapter = new EventAdapter(mEvents,new TimeStampFormatter());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.event_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

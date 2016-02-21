@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -34,7 +33,6 @@ public class UserDetailActivity extends AppCompatActivity {
     private ImageView mUserLogo;
     private TextView mUserLogin;
     private Call<Users> mUsersCall;
-    private Call mCall;
     private Menu mMenu;
     private Boolean status = null;
 
@@ -98,9 +96,8 @@ public class UserDetailActivity extends AppCompatActivity {
             case R.id.action_unfollow:
                 String val = item.getTitle().toString();
                 if (val.equals("UNFOLLOW")) {
-                   unfollowUser();
+                    unfollowUser();
                 } else if (val.equals("FOLLOW")) {
-                    Log.v("Status", "FOLLOW");
                     followUser();
                 }
 
@@ -204,7 +201,6 @@ public class UserDetailActivity extends AppCompatActivity {
         mUsersCall.enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Response<Users> response) {
-                Log.v("Code",""+response.code());
                 if (response.code() == 204) {
                     status = false;
                     updateMenuTitles(status);
@@ -220,8 +216,8 @@ public class UserDetailActivity extends AppCompatActivity {
             }
         });
     }
-    private void followUser()
-    {
+
+    private void followUser() {
         Intent intent = getIntent();
 
         String login = intent.getStringExtra(Constants.KEY_LOGIN);
@@ -234,7 +230,6 @@ public class UserDetailActivity extends AppCompatActivity {
         mUsersCall.enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Response<Users> response) {
-                Log.v("Code",""+response.code());
                 if (response.code() == 204) {
                     status = true;
                     updateMenuTitles(status);

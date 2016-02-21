@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,14 +126,11 @@ public class PeopleOrgFragment extends Fragment {
                 } else {
                     setErrorView(rootView);
                 }
-                Log.v("Call", "" + mList.isEmpty());
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.v("Error", t.getLocalizedMessage());
                 setErrorView(rootView);
-
             }
         });
     }
@@ -147,8 +143,8 @@ public class PeopleOrgFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getActivity(), UserDetailActivity.class);
-                intent.putExtra(Constants.KEY_LOGIN,mList.get(position).getLogin());
-                intent.putExtra(Constants.KEY_URL,mList.get(position).getAvatar_url());
+                intent.putExtra(Constants.KEY_LOGIN, mList.get(position).getLogin());
+                intent.putExtra(Constants.KEY_URL, mList.get(position).getAvatar_url());
                 startActivity(intent);
             }
         });
