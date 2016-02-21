@@ -48,7 +48,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                     Intent intent = new Intent(
                             Intent.ACTION_VIEW,
                             Uri.parse(Constants.API_BASE_URL + "/authorize?client_id="
-                                    + Constants.CLIENT_ID + "&redirect_uri=" + Constants.REDIRECT_URI + "&scope=repo"));
+                                    + Constants.CLIENT_ID + "&redirect_uri=" + Constants.REDIRECT_URI + "&scope=repo"+",user:follow"));
                     startActivity(intent);
                 }
             }

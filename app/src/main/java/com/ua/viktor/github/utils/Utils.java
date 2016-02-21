@@ -19,8 +19,7 @@ public class Utils {
         return s.hasNext() ? s.next() : "";
     }
 
-    public static String getUserAuthName(Context context)
-    {
+    public static String getUserAuthName(Context context) {
         AccountManager accountManager = AccountManager.get(context);
         String accountType = "com.github";
         String authType = "password";
@@ -29,5 +28,17 @@ public class Utils {
         String authName = account.name;
         return authName;
     }
+
+    public static String getAuthToken(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+        String accountType = "com.github";
+        String authType = "password";
+        Account[] accounts = accountManager.getAccountsByType(accountType);
+        Account account = accounts.length != 0 ? accounts[0] : null;
+
+        String authToken = accountManager.peekAuthToken(account, authType);
+        return authToken;
+    }
+
 
 }

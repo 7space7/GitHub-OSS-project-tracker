@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_sign_out:
                 logOut();
-             case R.id.nav_about:
+            case R.id.nav_about:
 
                 break;
         }
@@ -196,10 +196,11 @@ public class MainActivity extends AppCompatActivity
         Account[] accounts = mAccountManager.getAccountsByType(accountType);
         Account account = accounts.length != 0 ? accounts[0] : null;
 
+
         mUser_Name = mAccountManager.getUserData(account, Constants.KEY_USER_NAME);
         mUserIcon = mAccountManager.getUserData(account, Constants.KEY_USER_LOGO);
         String authToken = mAccountManager.peekAuthToken(account, authType);
-        Log.v(TAG,authToken);
+        Log.v(TAG, authToken);
 
         mUserLogo = (ImageView) headerLayout.findViewById(R.id.user_logo);
         mUseLogin = (TextView) headerLayout.findViewById(R.id.login_Name);

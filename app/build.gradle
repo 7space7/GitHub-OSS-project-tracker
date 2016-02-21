@@ -10,7 +10,8 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+
+
     }
     buildTypes {
         debug {
@@ -20,6 +21,7 @@ android {
             testCoverageEnabled true
         }
         release {
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testCoverageEnabled false
@@ -106,11 +108,10 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.6.0'
     compile 'com.google.code.gson:gson:2.3'
     compile 'com.github.xiprox.errorview:library:2.+'
-    compile 'io.realm:realm-android:0.87.2'
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.florent37:picassopalette:1.0.2@aar'
-    compile 'com.android.support:multidex:1.0.0'
+
 
     compile 'com.pnikosis:materialish-progress:1.7'
 
