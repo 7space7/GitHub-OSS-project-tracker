@@ -20,6 +20,13 @@ public interface UserService {
             @Query("access_token") String token
     );
 
+    @GET("/users/{username}")
+     Call<Users> getSingleUser(
+            @Path("username") String username,
+            @Query("client_id") String client_id,
+            @Query("client_secret") String client_secret
+     );
+
     @GET("/user/following/{username}")
     Call<Users> checkUserFollowing(
             @Path("username") String username,

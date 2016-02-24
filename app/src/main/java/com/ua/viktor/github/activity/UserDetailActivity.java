@@ -132,7 +132,7 @@ public class UserDetailActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_user_detail);
         tabLayout.addTab(tabLayout.newTab().setText("INFO"));
         tabLayout.addTab(tabLayout.newTab().setText("REPOSITORIES"));
-        // tabLayout.addTab(tabLayout.newTab().setText("Events"));
+        tabLayout.addTab(tabLayout.newTab().setText("Events"));
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
