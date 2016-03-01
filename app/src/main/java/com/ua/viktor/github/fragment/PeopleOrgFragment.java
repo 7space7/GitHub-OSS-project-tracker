@@ -6,11 +6,13 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.ua.viktor.github.R;
@@ -36,6 +38,7 @@ import tr.xip.errorview.ErrorView;
  */
 public class PeopleOrgFragment extends Fragment {
     private static final String ORG_KEY = "org";
+    private static final String AUTH_KEY = "AUTH_KEY";
     private PeopleOrgAdapter mPeopleOrgAdapter;
     private RecyclerView mRecyclerView;
     private ArrayList<Organizations> mList;
@@ -44,6 +47,8 @@ public class PeopleOrgFragment extends Fragment {
     private String mKeyQuery;
     private ErrorView mErrorView;
     private ProgressWheel progressWheel;
+    private String mAuthName;
+    private ProgressBar empty;
 
     public PeopleOrgFragment() {
         // Required empty public constructor
@@ -61,6 +66,7 @@ public class PeopleOrgFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(ORG_KEY, mList);
+        outState.putString(mAuthName, AUTH_KEY);
         super.onSaveInstanceState(outState);
     }
 
@@ -77,14 +83,20 @@ public class PeopleOrgFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_people_org, container, false);
+        empty = (ProgressBar) view.findViewById(android.R.id.empty);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.org_list);
         mErrorView = (ErrorView) view.findViewById(R.id.error_view_org);
         progressWheel = (ProgressWheel) view.findViewById(R.id.progress_wheel_org);
+
         if (savedInstanceState == null) {
+            mAuthName = Utils.getUserAuthName(getActivity());
             getPeopleOrgRequest(view);
+
+
         } else {
 
             mList = savedInstanceState.getParcelableArrayList(ORG_KEY);
+            mAuthName = savedInstanceState.getString(AUTH_KEY);
             int size = (mList == null) ? 0 : mList.size();
             if (mList != null && size != 0) {
                 initializeAdapter(view);
@@ -97,21 +109,20 @@ public class PeopleOrgFragment extends Fragment {
 
     }
 
+
     public void getPeopleOrgRequest(final View rootView) {
 
-
-        String authName = Utils.getUserAuthName(getActivity());
 
         OrganizationService client = ServiceGenerator.createService(OrganizationService.class);
         switch (mKeyQuery) {
             case Constants.KEY_FOLLOWING:
-                call = client.getFollowing(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+                call = client.getFollowing(mAuthName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
                 break;
             case Constants.KEY_FOLLOWERS:
-                call = client.getFollowers(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+                call = client.getFollowers(mAuthName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
                 break;
             case Constants.KEY_ORGANIZATIONS:
-                call = client.getOrgs(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
+                call = client.getOrgs(mAuthName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
                 break;
         }
 
@@ -119,6 +130,7 @@ public class PeopleOrgFragment extends Fragment {
         call.enqueue(new Callback<ArrayList<Organizations>>() {
             @Override
             public void onResponse(Response<ArrayList<Organizations>> response) {
+                Log.v("count_org", "call");
                 mList = response.body();
                 int size = (mList == null) ? 0 : mList.size();
                 if (mList != null && size != 0) {
@@ -136,9 +148,9 @@ public class PeopleOrgFragment extends Fragment {
     }
 
     private void initializeAdapter(View rootView) {
-
         mPeopleOrgAdapter = new PeopleOrgAdapter(mList);
-        mRecyclerView.setAdapter(mPeopleOrgAdapter);
+        mRecyclerView.setVisibility(View.VISIBLE);
+
         mPeopleOrgAdapter.SetOnClickListener(new PeopleOrgAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -148,17 +160,20 @@ public class PeopleOrgFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
         if (rootView.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         } else {
-            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         }
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(mPeopleOrgAdapter);
+        empty.setVisibility(View.GONE);
     }
 
-    public void setErrorView(final View view) {
 
-        mRecyclerView.setVisibility(View.GONE);
+    public void setErrorView(final View view) {
+        empty.setVisibility(View.GONE);
         mErrorView.setVisibility(View.VISIBLE);
         mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
             @Override

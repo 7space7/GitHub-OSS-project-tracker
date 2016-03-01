@@ -82,7 +82,9 @@ public class UserDetailActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(FOLLOWIN_KEY, status);
+       if(status!=null) {
+            outState.putBoolean(FOLLOWIN_KEY, status);
+       }
     }
 
     @Override
@@ -140,6 +142,8 @@ public class UserDetailActivity extends AppCompatActivity {
         final PagerUserDetail adapter = new PagerUserDetail
                 (getSupportFragmentManager(), tabLayout.getTabCount(), mLogin);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

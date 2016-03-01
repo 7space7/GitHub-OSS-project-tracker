@@ -42,6 +42,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="2dp"
             android:text="Test"
+            android:fontFamily="Roboto-Thin"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@android:color/white"
             android:textSize="15sp"/>

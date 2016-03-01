@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.EventAdapter;
@@ -39,7 +40,7 @@ public class EventFragment extends Fragment {
     private List<Event> mEvents;
     private ErrorView mErrorView;
     private String mLogin;
-
+    private ProgressBar empty;
 
 
 
@@ -79,6 +80,7 @@ public class EventFragment extends Fragment {
 
 
     private void initializeScreen(View rootView) {
+        empty= (ProgressBar) rootView.findViewById(android.R.id.empty);
         mErrorView = (ErrorView) rootView.findViewById(R.id.error_view_event);
         mEventAdapter = new EventAdapter(mEvents,new TimeStampFormatter());
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.event_list);
@@ -86,7 +88,7 @@ public class EventFragment extends Fragment {
     }
 
     public void setErrorView(final View view) {
-
+        empty.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.GONE);
         mErrorView.setVisibility(View.VISIBLE);
         mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
@@ -114,6 +116,7 @@ public class EventFragment extends Fragment {
                 if (mEvents != null && size != 0) {
                     mRecyclerView.setVisibility(View.VISIBLE);
                     mErrorView.setVisibility(View.GONE);
+                    empty.setVisibility(View.GONE);
                     mEventAdapter.swapList(mEvents);
                 } else {
                     setErrorView(view);

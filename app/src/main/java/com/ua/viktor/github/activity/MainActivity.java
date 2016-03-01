@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // set the toolbar title
+
         setTitle(title);
 
 
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

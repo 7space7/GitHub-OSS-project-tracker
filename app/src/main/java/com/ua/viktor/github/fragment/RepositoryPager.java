@@ -46,6 +46,7 @@ public class RepositoryPager extends Fragment {
         final PagerRepoAdapter adapter = new PagerRepoAdapter
                 (getActivity().getSupportFragmentManager(), tabLayout.getTabCount(),authName);
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

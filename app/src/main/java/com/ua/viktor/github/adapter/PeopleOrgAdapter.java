@@ -85,8 +85,5 @@ public class PeopleOrgAdapter extends RecyclerView.Adapter<PeopleOrgAdapter.View
         }
     }
 
-    public void swapList(ArrayList<Organizations> items) {
-        this.mOrganizationsList = items;
-        notifyDataSetChanged();
-    }
+
 }

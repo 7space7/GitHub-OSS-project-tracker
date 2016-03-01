@@ -36,6 +36,8 @@ public class UserDetailFragment extends Fragment {
     private ImageView mLocation_image;
     private ImageView mMail_image;
     private ImageView mLink_image;
+    private ImageView mRepo_image;
+    private ImageView mClock_image;
     private TextView mText_created_at;
     private TextView mText_location;
     private TextView mText_email;
@@ -94,12 +96,13 @@ public class UserDetailFragment extends Fragment {
             public void onResponse(Response<Users> response) {
                 Log.v(TAG, "call");
                 mUsers = response.body();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        setUserData(mUsers);
-                    }
-                });
+                if (mUsers != null)
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setUserData(mUsers);
+                        }
+                    });
             }
 
             @Override
@@ -112,10 +115,12 @@ public class UserDetailFragment extends Fragment {
     private void setUserData(Users users) {
         Date date = Utils.dateIso(users.getCreated_at());
         TimeStampFormatter time = new TimeStampFormatter();
-
-        mText_public_repos.setText(users.getPublic_repos()+" Repositories");
-        mText_created_at.setText("Joined " + time.format(date));
-
+        if (date != null) {
+            mRepo_image.setVisibility(View.VISIBLE);
+            mClock_image.setVisibility(View.VISIBLE);
+            mText_public_repos.setText(users.getPublic_repos() + " Repositories");
+            mText_created_at.setText("Joined " + time.format(date));
+        }
         if (users.getEmail() != null) {
             mText_email.setVisibility(View.VISIBLE);
             mMail_image.setVisibility(View.VISIBLE);
@@ -136,6 +141,8 @@ public class UserDetailFragment extends Fragment {
     }
 
     private void initializeScreen(View view) {
+        mClock_image= (ImageView) view.findViewById(R.id.clock_image);
+        mRepo_image= (ImageView) view.findViewById(R.id.repo_image);
         mLink_image = (ImageView) view.findViewById(R.id.link_image);
         mLocation_image = (ImageView) view.findViewById(R.id.location_image);
         mMail_image = (ImageView) view.findViewById(R.id.mail_image);

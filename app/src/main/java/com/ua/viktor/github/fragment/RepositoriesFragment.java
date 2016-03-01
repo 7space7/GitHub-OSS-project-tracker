@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 import com.ua.viktor.github.R;
@@ -39,6 +40,7 @@ public class RepositoriesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String key;
     private String mLogin;
+    private ProgressBar empty;
 
     public RepositoriesFragment() {
         // Required empty public constructor
@@ -126,6 +128,7 @@ public class RepositoriesFragment extends Fragment {
                     mRepositoriesAdapter.swapList(mRepositoriesList);
                     mRecyclerView.setVisibility(View.VISIBLE);
                     mErrorView.setVisibility(View.GONE);
+                    empty.setVisibility(View.GONE);
                 } else {
                     setErrorView(rootView);
                 }
@@ -141,6 +144,7 @@ public class RepositoriesFragment extends Fragment {
     }
 
     private void initializeScreen(View rootView) {
+        empty= (ProgressBar) rootView.findViewById(android.R.id.empty);
         progressWheel = (ProgressWheel) rootView.findViewById(R.id.progress_wheel);
         mErrorView = (ErrorView) rootView.findViewById(R.id.error_view);
         mRepositoriesAdapter = new RepositoriesAdapter(mRepositoriesList);
@@ -151,6 +155,7 @@ public class RepositoriesFragment extends Fragment {
     public void setErrorView(final View view) {
 
         mRecyclerView.setVisibility(View.GONE);
+        empty.setVisibility(View.GONE);
         mErrorView.setVisibility(View.VISIBLE);
         mErrorView.setOnRetryListener(new ErrorView.RetryListener() {
             @Override
