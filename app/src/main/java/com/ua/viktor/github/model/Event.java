@@ -1,5 +1,7 @@
 package com.ua.viktor.github.model;
 
+import android.database.Cursor;
+
 /**
  * Created by viktor on 28.01.16.
  */
@@ -33,6 +35,11 @@ public class Event {
 
     public String getCreated_at() {
         return created_at;
+    }
+
+    public static Event fromCursor(Cursor cursor) {
+        Event planet = new Event();
+        return planet;
     }
 
     public static class Actor {
