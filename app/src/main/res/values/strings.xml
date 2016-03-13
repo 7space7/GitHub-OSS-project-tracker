@@ -10,4 +10,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_user_detail">UserDetailActivity</string>
+
+    <string name="content_authority">com.ua.viktor.github.app</string>
+    <string name="sync_account_type">com.github</string>
+
 </resources>

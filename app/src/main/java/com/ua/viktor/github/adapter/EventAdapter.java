@@ -47,6 +47,38 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         Event event = mEvents.get(position);
 
         Context context = holder.userLogo.getContext();
+        String typeName = getEvent(event);
+        if (typeName.equals("")) {
+            typeName = event.getType();
+        }
+
+
+        int sizeLogin = event.getActor().getLogin().length();
+        int sizeType = typeName.length();
+        int sizeRepo = event.getRepo().getName().length();
+        int preSize = sizeLogin + sizeType + 1;
+        int size = sizeLogin + sizeType + sizeRepo + 2;
+
+        SpannableStringBuilder eventName = new SpannableStringBuilder(event.getActor().getLogin() + " " + typeName + " " + event.getRepo().getName());
+
+        StyleSpan bss = new StyleSpan(Typeface.BOLD);
+        StyleSpan iss = new StyleSpan(Typeface.BOLD_ITALIC);
+
+        eventName.setSpan(bss, 0, sizeLogin, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        eventName.setSpan(iss, preSize, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        holder.nameEvent.setText(eventName);
+
+
+        holder.time.setText(timeStampFormatter.format(Utils.dateIso(event.getCreated_at())));
+
+        Picasso.with(context).load(event.getActor().getAvatar_url())
+                .transform(new CircleTransform())
+                .into(holder.userLogo);
+
+    }
+
+    private String getEvent(Event event) {
         String typeName = "";
         switch (event.getType()) {
             case "PushEvent":
@@ -71,33 +103,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                 typeName = "created repository";
                 break;
         }
-        if (typeName.equals("")) {
-            typeName = event.getType();
-        }
-        int sizeLogin = event.getActor().getLogin().length();
-        int sizeType = typeName.length();
-        int sizeRepo = event.getRepo().getName().length();
-        int preSize = sizeLogin + sizeType + 1;
-        int size = sizeLogin + sizeType + sizeRepo + 2;
-
-
-        SpannableStringBuilder eventName = new SpannableStringBuilder(event.getActor().getLogin() + " " + typeName + " " + event.getRepo().getName());
-
-        StyleSpan bss = new StyleSpan(Typeface.BOLD);
-        StyleSpan iss = new StyleSpan(Typeface.BOLD_ITALIC);
-
-        eventName.setSpan(bss, 0, sizeLogin, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        eventName.setSpan(iss, preSize, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-        holder.nameEvent.setText(eventName);
-
-
-        holder.time.setText(timeStampFormatter.format(Utils.dateIso(event.getCreated_at())));
-
-        Picasso.with(context).load(event.getActor().getAvatar_url())
-                .transform(new CircleTransform())
-                .into(holder.userLogo);
-
+        return typeName;
     }
 
     public interface OnItemClickListener {

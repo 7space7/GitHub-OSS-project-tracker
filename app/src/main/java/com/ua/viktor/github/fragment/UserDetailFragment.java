@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.model.Users;
-import com.ua.viktor.github.retrofit.ServiceGenerator;
-import com.ua.viktor.github.retrofit.UserService;
+import com.ua.viktor.github.rest.ServiceGenerator;
+import com.ua.viktor.github.rest.UserService;
 import com.ua.viktor.github.utils.Constants;
 import com.ua.viktor.github.utils.TimeStampFormatter;
 import com.ua.viktor.github.utils.Utils;

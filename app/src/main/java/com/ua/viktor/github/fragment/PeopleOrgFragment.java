@@ -19,8 +19,8 @@ import com.ua.viktor.github.R;
 import com.ua.viktor.github.activity.UserDetailActivity;
 import com.ua.viktor.github.adapter.PeopleOrgAdapter;
 import com.ua.viktor.github.model.Organizations;
-import com.ua.viktor.github.retrofit.OrganizationService;
-import com.ua.viktor.github.retrofit.ServiceGenerator;
+import com.ua.viktor.github.rest.OrganizationService;
+import com.ua.viktor.github.rest.ServiceGenerator;
 import com.ua.viktor.github.utils.Constants;
 import com.ua.viktor.github.utils.Utils;
 

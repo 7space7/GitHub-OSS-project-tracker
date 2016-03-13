@@ -14,11 +14,10 @@ import android.widget.ProgressBar;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.EventAdapter;
 import com.ua.viktor.github.model.Event;
-import com.ua.viktor.github.retrofit.EventService;
-import com.ua.viktor.github.retrofit.ServiceGenerator;
+import com.ua.viktor.github.rest.EventService;
+import com.ua.viktor.github.rest.ServiceGenerator;
 import com.ua.viktor.github.utils.Constants;
 import com.ua.viktor.github.utils.TimeStampFormatter;
-import com.ua.viktor.github.utils.Utils;
 
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class EventFragment extends Fragment {
     public static EventFragment newInstance(String mLogin) {
         EventFragment fragment = new EventFragment();
         Bundle args = new Bundle();
-        args.putString(KEY_LOGIN,mLogin);
+        args.putString(KEY_LOGIN, mLogin);
         fragment.setArguments(args);
         return fragment;
     }
@@ -102,12 +101,9 @@ public class EventFragment extends Fragment {
     private void getEventRequest(final View view) {
 
         EventService client = ServiceGenerator.createService(EventService.class);
-        if(mLogin!=null) {
+        if(mLogin!=null)
             call = client.userEvent(mLogin, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
-        }else {
-            String authName = Utils.getUserAuthName(getContext());
-            call = client.userEvent(authName, Constants.CLIENT_ID, Constants.CLIENT_SECRET);
-        }
+
         call.enqueue(new Callback<List<Event>>() {
             @Override
             public void onResponse(Response<List<Event>> response) {

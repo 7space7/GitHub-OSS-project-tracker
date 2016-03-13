@@ -18,8 +18,8 @@ import com.squareup.okhttp.Response;
 import com.ua.viktor.github.activity.MainActivity;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.model.Users;
-import com.ua.viktor.github.retrofit.ServiceGenerator;
-import com.ua.viktor.github.retrofit.UserService;
+import com.ua.viktor.github.rest.ServiceGenerator;
+import com.ua.viktor.github.rest.UserService;
 import com.ua.viktor.github.utils.Constants;
 
 import org.json.JSONException;

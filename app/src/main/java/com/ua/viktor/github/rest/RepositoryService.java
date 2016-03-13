@@ -1,4 +1,4 @@
-package com.ua.viktor.github.retrofit;
+package com.ua.viktor.github.rest;
 
 import com.ua.viktor.github.model.Repositories;
 

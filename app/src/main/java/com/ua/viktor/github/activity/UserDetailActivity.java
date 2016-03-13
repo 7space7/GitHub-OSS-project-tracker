@@ -16,8 +16,8 @@ import com.squareup.picasso.Picasso;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.adapter.pager.PagerUserDetail;
 import com.ua.viktor.github.model.Users;
-import com.ua.viktor.github.retrofit.ServiceGenerator;
-import com.ua.viktor.github.retrofit.UserService;
+import com.ua.viktor.github.rest.ServiceGenerator;
+import com.ua.viktor.github.rest.UserService;
 import com.ua.viktor.github.utils.CircleTransform;
 import com.ua.viktor.github.utils.Constants;
 import com.ua.viktor.github.utils.Utils;
@@ -82,9 +82,9 @@ public class UserDetailActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-       if(status!=null) {
+        if (status != null) {
             outState.putBoolean(FOLLOWIN_KEY, status);
-       }
+        }
     }
 
     @Override
@@ -102,7 +102,6 @@ public class UserDetailActivity extends AppCompatActivity {
                 } else if (val.equals("FOLLOW")) {
                     followUser();
                 }
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -163,10 +162,14 @@ public class UserDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void checkIsFollowing() {
+    private String getUserLogin() {
         Intent intent = getIntent();
 
-        String login = intent.getStringExtra(Constants.KEY_LOGIN);
+        return intent.getStringExtra(Constants.KEY_LOGIN);
+    }
+
+    private void checkIsFollowing() {
+        String login = getUserLogin();
 
         String authToken = Utils.getAuthToken(getApplication());
 
@@ -193,9 +196,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
     private void unfollowUser() {
 
-        Intent intent = getIntent();
-
-        String login = intent.getStringExtra(Constants.KEY_LOGIN);
+        String login = getUserLogin();
 
         String authToken = Utils.getAuthToken(getApplication());
 
@@ -222,9 +223,7 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void followUser() {
-        Intent intent = getIntent();
-
-        String login = intent.getStringExtra(Constants.KEY_LOGIN);
+        String login = getUserLogin();
 
         String authToken = Utils.getAuthToken(getApplication());
 

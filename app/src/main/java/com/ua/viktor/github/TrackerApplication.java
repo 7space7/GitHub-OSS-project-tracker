@@ -7,8 +7,11 @@ public class TrackerApplication extends android.app.Application {
 
     @Override
     public void onCreate() {
+       // MultiDex.install(this);
         super.onCreate();
-      //  JodaTimeAndroid.init(this);
+        //Stetho.initializeWithDefaults(this);
+       // MultiDex.install(this);
+
     }
 
 }

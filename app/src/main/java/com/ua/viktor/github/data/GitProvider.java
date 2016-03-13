@@ -20,19 +20,19 @@ public class GitProvider  extends ContentProvider {
     private GitDBHelper mOpenHelper;
 
     // Codes for the UriMatcher //////
-    private static final int TAG = 100;
-    private static final int TAG_WITH_ID = 200;
+    public static final int EVENT = 100;
+    public static final int EVENT_WITH_ID = 200;
     ////////
 
-    private static UriMatcher buildUriMatcher(){
+    public static UriMatcher buildUriMatcher(){
         // Build a UriMatcher by adding a specific code to return based on a match
         // It's common to use NO_MATCH as the code for this case.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = GitContract.CONTENT_AUTHORITY;
 
         // add a code for each type of URI you want
-        matcher.addURI(authority, GitContract.EventEntry.TABLE_EVENT, TAG);
-        matcher.addURI(authority, GitContract.EventEntry.TABLE_EVENT + "/#", TAG_WITH_ID);
+        matcher.addURI(authority, GitContract.EventEntry.TABLE_EVENT, EVENT);
+        matcher.addURI(authority, GitContract.EventEntry.TABLE_EVENT + "/#", EVENT_WITH_ID);
 
         return matcher;
     }
@@ -49,7 +49,7 @@ public class GitProvider  extends ContentProvider {
         Cursor retCursor;
         switch(sUriMatcher.match(uri)){
             // All Flavors selected
-            case TAG:{
+            case EVENT:{
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         GitContract.EventEntry.TABLE_EVENT,
                         projection,
@@ -58,10 +58,10 @@ public class GitProvider  extends ContentProvider {
                         null,
                         null,
                         sortOrder);
-                return retCursor;
+                break;
             }
             // Individual tag based on Id selected
-            case TAG_WITH_ID:{
+            case EVENT_WITH_ID:{
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         GitContract.EventEntry.TABLE_EVENT,
                         projection,
@@ -70,13 +70,16 @@ public class GitProvider  extends ContentProvider {
                         null,
                         null,
                         sortOrder);
-                return retCursor;
+                break;
             }
             default:{
                 // By default, we assume a bad URI
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
+
         }
+        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return retCursor;
     }
 
     @Nullable
@@ -85,10 +88,10 @@ public class GitProvider  extends ContentProvider {
         final int match = sUriMatcher.match(uri);
 
         switch (match){
-            case TAG:{
+            case EVENT:{
                 return GitContract.EventEntry.CONTENT_DIR_TYPE;
             }
-            case TAG_WITH_ID:{
+            case EVENT_WITH_ID:{
                 return GitContract.EventEntry.CONTENT_ITEM_TYPE;
             }
             default:{
@@ -103,11 +106,11 @@ public class GitProvider  extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Uri returnUri;
         switch (sUriMatcher.match(uri)) {
-            case TAG: {
+            case EVENT: {
                 long _id = db.insert(GitContract.EventEntry.TABLE_EVENT, null, values);
                 // insert unless it is already contained in the database
                 if (_id > 0) {
-                    returnUri = GitContract.EventEntry.buildTagsUri(_id);
+                    returnUri = GitContract.EventEntry.buildEventUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into: " + uri);
                 }
@@ -130,14 +133,14 @@ public class GitProvider  extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int numDeleted;
         switch(match){
-            case TAG:
+            case EVENT:
                 numDeleted = db.delete(
                         GitContract.EventEntry.TABLE_EVENT, selection, selectionArgs);
                 // reset _ID
                 db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" +
                         GitContract.EventEntry.TABLE_EVENT + "'");
                 break;
-            case TAG_WITH_ID:
+            case EVENT_WITH_ID:
                 numDeleted = db.delete(GitContract.EventEntry.TABLE_EVENT,
                         GitContract.EventEntry._ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
@@ -158,7 +161,7 @@ public class GitProvider  extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch(match){
-            case TAG:
+            case EVENT:
                 // allows for multiple transactions
                 db.beginTransaction();
 
@@ -213,14 +216,14 @@ public class GitProvider  extends ContentProvider {
         }
 
         switch(sUriMatcher.match(uri)){
-            case TAG:{
+            case EVENT:{
                 numUpdated = db.update(GitContract.EventEntry.TABLE_EVENT,
                         contentValues,
                         selection,
                         selectionArgs);
                 break;
             }
-            case TAG_WITH_ID: {
+            case EVENT_WITH_ID: {
                 numUpdated = db.update(GitContract.EventEntry.TABLE_EVENT,
                         contentValues,
                         GitContract.EventEntry._ID + " = ?",

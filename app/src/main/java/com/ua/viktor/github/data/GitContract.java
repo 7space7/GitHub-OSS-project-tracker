@@ -36,7 +36,7 @@ public class GitContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_EVENT;
 
         // for building URIs on insertion
-        public static Uri buildTagsUri(long id) {
+        public static Uri buildEventUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }

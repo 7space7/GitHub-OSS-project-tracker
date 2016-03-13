@@ -12,7 +12,7 @@ public class GitDBHelper extends SQLiteOpenHelper {
     public static final String LOG_TAG = GitDBHelper.class.getSimpleName();
 
 
-    private static final String DATABASE_NAME = "event.db";
+    public static final String DATABASE_NAME = "event.db";
     private static final int DATABASE_VERSION = 3;
 
     public GitDBHelper(Context context) {

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.ua.viktor.github.R;
 import com.ua.viktor.github.authentication.LoginActivity;
-import com.ua.viktor.github.fragment.EventFragment;
+import com.ua.viktor.github.fragment.EventUserFragment;
 import com.ua.viktor.github.fragment.PeopleOrgPager;
 import com.ua.viktor.github.fragment.RepositoryPager;
 import com.ua.viktor.github.utils.CircleTransform;
@@ -34,6 +34,7 @@ import com.ua.viktor.github.utils.Utils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String LOG_TAG =MainActivity.class.getSimpleName() ;
     private ImageView mUserLogo;
     private TextView mUseLogin;
     private TextView mUserName;
@@ -43,11 +44,12 @@ public class MainActivity extends AppCompatActivity
     private String mUserIcon;
     private String mUser_Name;
 
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(Constants.STATE_SELECTED_POSITION);
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (viewId) {
             case R.id.nav_event:
-                fragment = new EventFragment();
+                fragment = new EventUserFragment();
                 title = "Events";
                 break;
             case R.id.nav_repository:
