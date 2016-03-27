@@ -47,7 +47,7 @@ public class TestProvider extends ApplicationTestCase {
 
     @Before
     public void setUp() throws Exception{
-        deleteAllRecords();
+        //deleteAllRecords();
     }
 
   /*  @Test

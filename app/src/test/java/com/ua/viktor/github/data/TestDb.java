@@ -131,7 +131,6 @@ public class TestDb extends ApplicationTestCase {
 
         // Verify we got a row back.
         assertThat(locationRowId, not(-1L));
-        // assertTrue(locationRowId != -1);
 
         // Data's inserted.  IN THEORY.  Now pull some out to stare at it and verify it made
         // the round trip.
