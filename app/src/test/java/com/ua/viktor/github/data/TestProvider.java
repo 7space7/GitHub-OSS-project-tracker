@@ -18,6 +18,7 @@ import static org.hamcrest.core.Is.is;
 /**
  * Created by viktor on 09.03.16.
  */
+
 public class TestProvider extends ApplicationTestCase {
 
     public static final String LOG_TAG = TestProvider.class.getSimpleName();
@@ -47,7 +48,7 @@ public class TestProvider extends ApplicationTestCase {
 
     @Before
     public void setUp() throws Exception{
-        //deleteAllRecords();
+        deleteAllRecords();
     }
 
   /*  @Test
@@ -86,34 +87,6 @@ public class TestProvider extends ApplicationTestCase {
 
         assertThat("Error: the MoviesEntry CONTENT_URI should return MovieEntry.CONTENT_TYPE",
                 GitContract.EventEntry.CONTENT_ITEM_TYPE, is(type));
-    }
-
-    @Test
-    /**
-     * This test uses the database directly to insert a movie and then uses the content provider
-     *  to read out the data.
-     */
-    public void testBasicMovieQuery(){
-        //Insert our test records into the database
-        GitDBHelper dbHelper = new GitDBHelper(getContext());
-
-        ContentValues movieValue = ProviderTestUtilities.createEventValue(false);
-
-        ContentValues allInner = new ContentValues();
-        allInner.putAll(movieValue);
-
-        long eventRowId = ProviderTestUtilities.insertDefaultMovieWithReviewAndVideo(getContext());
-
-        Cursor movieCursor = getContext().getContentResolver().query(
-                GitContract.EventEntry.buildEventUri(eventRowId),
-                null,
-                null,
-                null,
-                null
-        );
-
-        ProviderTestUtilities.validateCursor("testBasicMovieQuery", movieCursor, allInner);
-
     }
 
 
@@ -244,11 +217,9 @@ public class TestProvider extends ApplicationTestCase {
 
     static private final int BULK_INSERT_RECORDS_TO_INSERT = 10;
     static ContentValues[] createBulkInsertMoviesValues(){
-        long currentTestDate = ProviderTestUtilities.TEST_DATE;
-        long millisecondsInADay = 100*60*60*24;
         ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
 
-        for (int i = 0; i<BULK_INSERT_RECORDS_TO_INSERT; i++, currentTestDate +=millisecondsInADay){
+        for (int i = 0; i<BULK_INSERT_RECORDS_TO_INSERT; i++){
             returnContentValues[i] = ProviderTestUtilities.createVariableValues(i);
         }
         return returnContentValues;
@@ -274,15 +245,15 @@ public class TestProvider extends ApplicationTestCase {
         //Now we can bulkInsert some event.
         ContentValues[] bulkInsertContentValues = createBulkInsertMoviesValues();
 
-        ProviderTestUtilities.TestContentObserver movieObserver = ProviderTestUtilities.getTestContentObserver();
+        ProviderTestUtilities.TestContentObserver eventObserver = ProviderTestUtilities.getTestContentObserver();
         getContext().getContentResolver().registerContentObserver(GitContract.EventEntry.CONTENT_URI, true,
-                movieObserver);
+                eventObserver);
 
         int insertCount = getContext().getContentResolver().bulkInsert(GitContract.EventEntry.CONTENT_URI,
                 bulkInsertContentValues);
 
-        movieObserver.waitForNotificationOrFail();
-        getContext().getContentResolver().unregisterContentObserver(movieObserver);
+        eventObserver.waitForNotificationOrFail();
+        getContext().getContentResolver().unregisterContentObserver(eventObserver);
 
         assertThat(insertCount, is(BULK_INSERT_RECORDS_TO_INSERT));
         //assertEquals(insertCount, BULK_INSERT_RECORDS_TO_INSERT);

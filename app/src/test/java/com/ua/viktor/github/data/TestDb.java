@@ -123,7 +123,7 @@ public class TestDb extends ApplicationTestCase {
 
         // Second Step: Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
-        ContentValues testValues = ProviderTestUtilities.createEventValue(false);
+        ContentValues testValues = ProviderTestUtilities.createVariableValues(1);
 
         // Third Step: Insert ContentValues into database and get a row ID back
         long locationRowId;

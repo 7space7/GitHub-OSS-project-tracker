@@ -29,13 +29,11 @@ public class ProviderTestUtilities {
 
     public static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertThat("Empty cursor returned. " + error, valueCursor.moveToFirst(), is(true));
-        //assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
         valueCursor.close();
     }
     public static void validateWithoutCloseCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertThat("Empty cursor returned. " + error, valueCursor.moveToFirst(), is(true));
-        //assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
     }
 
